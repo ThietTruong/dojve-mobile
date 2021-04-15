@@ -1,34 +1,22 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {useState, useEffect, useMemo} from 'react';
+import {Provider} from 'react-redux';
 
-import React from 'react';
-
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import RootStackScreen from './src/screens/RootStackScreen';
+import store from './src/app/store';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <RootStackScreen />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <RootStackScreen />
+      </NavigationContainer>
+    </Provider>
   );
 };
 

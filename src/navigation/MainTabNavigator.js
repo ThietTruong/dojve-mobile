@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import ChatsScreen from '../screens/ChatScreents/ChatsScreen';
 const MainTab = createMaterialTopTabNavigator();
 function HomeScreen() {
   return (
@@ -20,7 +21,7 @@ function SettingsScreen() {
 const MainTabNavigator = () => {
   return (
     <MainTab.Navigator>
-      <MainTab.Screen name="Chat" component={HomeScreen} />
+      <MainTab.Screen name="ChatScreen" component={ChatsScreen} />
       <MainTab.Screen name="Status" component={SettingsScreen} />
     </MainTab.Navigator>
   );

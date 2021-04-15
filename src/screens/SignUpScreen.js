@@ -9,12 +9,18 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
+import axios from 'axios';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 const SignUpScreen = ({navigation}) => {
+  const [newAccout, setNewAccout] = useState({
+    email: '',
+    password: '',
+  });
+
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -30,6 +36,10 @@ const SignUpScreen = ({navigation}) => {
         email: val,
         check_textInputChange: true,
       });
+      setNewAccout({
+        ...newAccout,
+        email: val,
+      });
     } else {
       setData({
         ...data,
@@ -41,13 +51,19 @@ const SignUpScreen = ({navigation}) => {
   const handleConfirmChangePassword = val => {
     setData({
       ...data,
-      password: val,
+      confirm_password: val,
     });
+    if (val === newAccout.password) {
+      setNewAccout({
+        ...newAccout,
+        password: val,
+      });
+    }
   };
   const handleChangePassword = val => {
     setData({
       ...data,
-      confirm_password: val,
+      password: val,
     });
   };
   const updateSecureTextEntry = () => {
@@ -62,6 +78,25 @@ const SignUpScreen = ({navigation}) => {
       confirm_secureTextEntry: !data.confirm_secureTextEntry,
     });
   };
+  const handleSignUp = async () => {
+    if (newAccout.email === '' && newAccout.password === '') {
+      Alert.alert('Email and password must exist.');
+    } else if (newAccout.email) {
+      if (validateEmail(newAccout.email)) {
+        if (data.password === data.confirm_password) {
+          console.log('Signup thanh cong');
+        } else {
+          Alert.alert('Password and confirmation password must be the same');
+        }
+      } else {
+        Alert.alert('Invalid email');
+      }
+    }
+  };
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
@@ -137,17 +172,21 @@ const SignUpScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.button}>
-          <LinearGradient colors={['#08d4ce', '#01ad9b']} style={styles.signIn}>
-            <Text
-              style={[
-                styles.textSign,
-                {
-                  color: '#fff',
-                },
-              ]}>
-              Sign Up
-            </Text>
-          </LinearGradient>
+          <TouchableOpacity onPress={handleSignUp} style={{width: '100%'}}>
+            <LinearGradient
+              colors={['#08d4ce', '#01ad9b']}
+              style={styles.signIn}>
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: '#fff',
+                  },
+                ]}>
+                Sign Up
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={[

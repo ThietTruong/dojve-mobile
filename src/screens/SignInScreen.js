@@ -1,4 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {setUser} from '../feature/user';
+import {connectSocket} from '../feature/socketClient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import {
   View,
   Text,
@@ -11,18 +16,27 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+// import axios from '../utility/axios';
 const SignInScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     email: '',
     password: '',
     check_textInputChange: false,
     secureTextEntry: true,
   });
+  const [account, setAccount] = useState({
+    email: '',
+    password: '',
+  });
   const textInputChange = val => {
     if (val.length !== 0) {
+      setAccount({
+        ...account,
+        email: val,
+      });
       setData({
         ...data,
         email: val,
@@ -37,6 +51,10 @@ const SignInScreen = ({navigation}) => {
     }
   };
   const handleChangePassword = val => {
+    setAccount({
+      ...account,
+      password: val,
+    });
     setData({
       ...data,
       password: val,
@@ -48,9 +66,48 @@ const SignInScreen = ({navigation}) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
+  // useEffect(() => {
+  //   axios.get('http://10.0.2.2:5000/auth/signinW').then(res => {
+  //     const {data} = res;
+  //     if (!data.error) {
+  //       let user = data.user;
+  //       user.token = data.token;
+  //       dispatch(setUser(user));
+  //       dispatch(connectSocket(data.token));
+  //       navigation.navigate('Chat');
+  //     } else {
+  //       console.log(data);
+  //     }
+  //   });
+  // }, [dispatch]);
+  useEffect(async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    if (userToken) {
+      navigation.navigate('Chat');
+    }
+  }, []);
   const handleSignIn = () => {
-    navigation.navigate('Chat');
+    axios
+      .post('http://10.0.2.2:5000/auth/signin', account)
+      .then(async res => {
+        const {data} = res;
+        if (!data.error) {
+          let user = data.user;
+          dispatch(setUser(user));
+          dispatch(connectSocket(data.token));
+          await AsyncStorage.setItem('userToken', data.token);
+
+          navigation.navigate('Chat');
+        } else {
+          console.log(data);
+          Alert.alert(data.message);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
   };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
