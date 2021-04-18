@@ -5,7 +5,7 @@ export const socketSlice = createSlice({
   initialState: {},
   reducers: {
     connectSocket: (state, action) => {
-      state.current = io.connect(`http://localhost:5000`, {
+      state.current = io.connect(`http://10.0.2.2:5000`, {
         query: {
           token: action.payload,
         },

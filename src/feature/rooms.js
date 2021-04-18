@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from '@reduxjs/toolkit';
 export const roomSlide = createSlice({
-  name: "socket",
+  name: 'rooms',
   initialState: {
     rooms: [],
   },
@@ -9,7 +9,7 @@ export const roomSlide = createSlice({
       state.rooms = action.payload;
     },
     roomActive: (state, action) => {
-      state.rooms = state.rooms.map((room) => {
+      state.rooms = state.rooms.map(room => {
         if (room._id === action.payload._id)
           room.status = action.payload.status;
         return room;
@@ -19,6 +19,6 @@ export const roomSlide = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setRooms, roomActive } = roomSlide.actions;
+export const {setRooms, roomActive} = roomSlide.actions;
 
 export default roomSlide.reducer;

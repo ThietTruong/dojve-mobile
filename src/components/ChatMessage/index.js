@@ -1,12 +1,13 @@
+import React, {useState, useEffect} from 'react';
 import moment from 'moment';
-import React from 'react';
 import {View, Text} from 'react-native';
-
+import {useSelector} from 'react-redux';
 import style from './style';
 
 function ChatMessage(props) {
-  const {message} = props;
-  const isMessage = message.user.id === 'u1';
+  const {message, idUser} = props;
+  const isMessage = message.sender == idUser;
+  const socket = useSelector(state => state.socket.current);
 
   return (
     <View style={style.container}>
@@ -19,7 +20,7 @@ function ChatMessage(props) {
             marginRight: isMessage ? 0 : 50,
           },
         ]}>
-        {!isMessage && <Text style={style.name}>{message.user.name}</Text>}
+        {/* {!isMessage && <Text style={style.name}>{message.content}</Text>} */}
         <Text style={style.message}>{message.content}</Text>
         <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
       </View>

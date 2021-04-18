@@ -8,16 +8,17 @@ import {
   StyleSheet,
   StatusBar,
   Alert,
+  ScrollView,
 } from 'react-native';
 import axios from 'axios';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 const SignUpScreen = ({navigation}) => {
-  const [newAccout, setNewAccout] = useState({
+  const [newAccount, setNewAccount] = useState({
     email: '',
+    name: '',
     password: '',
   });
 
@@ -26,6 +27,7 @@ const SignUpScreen = ({navigation}) => {
     password: '',
     confirm_password: '',
     check_textInputChange: false,
+    check_nameInput: false,
     secureTextEntry: true,
     confirm_secureTextEntry: false,
   });
@@ -36,8 +38,8 @@ const SignUpScreen = ({navigation}) => {
         email: val,
         check_textInputChange: true,
       });
-      setNewAccout({
-        ...newAccout,
+      setNewAccount({
+        ...newAccount,
         email: val,
       });
     } else {
@@ -48,14 +50,30 @@ const SignUpScreen = ({navigation}) => {
       });
     }
   };
+  const nameChange = val => {
+    if (val.length !== 0) {
+      setNewAccount({
+        ...newAccount,
+        name: val,
+      });
+      setData({
+        ...data,
+        check_nameInput: true,
+      });
+    } else {
+      setData({
+        check_nameInput: false,
+      });
+    }
+  };
   const handleConfirmChangePassword = val => {
     setData({
       ...data,
       confirm_password: val,
     });
-    if (val === newAccout.password) {
-      setNewAccout({
-        ...newAccout,
+    if (val === data.password) {
+      setNewAccount({
+        ...newAccount,
         password: val,
       });
     }
@@ -78,13 +96,31 @@ const SignUpScreen = ({navigation}) => {
       confirm_secureTextEntry: !data.confirm_secureTextEntry,
     });
   };
+
   const handleSignUp = async () => {
-    if (newAccout.email === '' && newAccout.password === '') {
-      Alert.alert('Email and password must exist.');
-    } else if (newAccout.email) {
-      if (validateEmail(newAccout.email)) {
+    if (
+      newAccount.email === '' &&
+      newAccount.password === '' &&
+      newAccount.email === ''
+    ) {
+      Alert.alert('Email, name and password must exist.');
+    } else if (newAccount.email) {
+      if (validateEmail(newAccount.email)) {
         if (data.password === data.confirm_password) {
-          console.log('Signup thanh cong');
+          axios
+            .post('http://10.0.2.2:5000/auth/signup', newAccount)
+            .then(res => {
+              if (res.data.error) {
+                Alert.alert(res.data.message);
+              } else {
+                setNewAccount({
+                  email: '',
+                  name: '',
+                  password: '',
+                });
+              }
+              Alert.alert(res.data.message);
+            });
         } else {
           Alert.alert('Password and confirmation password must be the same');
         }
@@ -98,7 +134,7 @@ const SignUpScreen = ({navigation}) => {
     return re.test(email);
   }
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
       <View style={styles.header}>
         <Text style={styles.text_header}>Register</Text>
@@ -114,6 +150,21 @@ const SignUpScreen = ({navigation}) => {
             onChangeText={val => textInputChange(val)}
           />
           {data.check_textInputChange ? (
+            <Animatable.View animation="bounceIn">
+              <Feather name="check-circle" color="green" size={20} />
+            </Animatable.View>
+          ) : null}
+        </View>
+        <Text style={styles.text_footer}>Name</Text>
+        <View style={styles.action}>
+          <FontAwesome name="user-o" color="#05735a" size={20} />
+          <TextInput
+            placeholder="Your Name"
+            style={styles.textInput}
+            autoCapitalize="none"
+            onChangeText={val => nameChange(val)}
+          />
+          {data.check_nameInput ? (
             <Animatable.View animation="bounceIn">
               <Feather name="check-circle" color="green" size={20} />
             </Animatable.View>
@@ -209,7 +260,7 @@ const SignUpScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </Animatable.View>
-    </View>
+    </ScrollView>
   );
 };
 export default SignUpScreen;
@@ -225,7 +276,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: 4.5,
+    flex: 3,
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

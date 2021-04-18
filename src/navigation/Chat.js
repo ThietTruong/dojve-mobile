@@ -1,22 +1,32 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, Alert} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import ChatRoomScreen from '../screens/ChatScreents/ChatRoomScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainTabNavigator from './MainTabNavigator';
-import axios from 'axios';
+import axios from '../utility/axios';
+import io from 'socket.io-client';
+import {useSelector} from 'react-redux';
+import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 export default function Chat({navigation}) {
+  // http://10.0.2.2:5000
+
+  const socket = useSelector(state => state.socket.current);
+  const user = useSelector(state => state.user.current);
+  const [typing, setTyping] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [partner, setPartner] = useState(undefined);
+  const [token, setToken] = useState();
   const handleLeaveChat = async action => {
     navigation.dispatch(action);
     try {
       await AsyncStorage.setItem('userToken', '');
-    } catch (e) {
-      // saving error
-    }
+    } catch (e) {}
   };
+
   React.useEffect(
     () =>
       navigation.addListener('beforeRemove', e => {
