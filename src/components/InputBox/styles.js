@@ -33,5 +33,60 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  centeredView: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    marginTop: 'auto',
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    height: '50%',
+    alignItems: "flex-end",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  tabs: {
+    height : '55%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  tabTextStyle: {
+    color: Colors.Grey,
+    marginLeft: 5,
+    marginRight: 5,
+    fontSize: 20,
+  },
+  tabUnderline: {
+    textDecorationLine: 'underline',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 export default styles;

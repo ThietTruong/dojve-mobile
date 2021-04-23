@@ -9,6 +9,9 @@ import axios from '../utility/axios';
 import io from 'socket.io-client';
 import {useSelector} from 'react-redux';
 import {get} from 'react-native/Libraries/Utilities/PixelRatio';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 export default function Chat({navigation}) {
@@ -87,30 +90,30 @@ export default function Chat({navigation}) {
           ),
         }}
       />
-      {/* <Stack.Screen
-        name="ChatRoom"
-        component={ChatRoomScreen}
-        options={({route}) => ({
-          title: route.params.name,
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: 'row',
-                width: 100,
-                justifyContent: 'space-between',
-                marginRight: 10,
-              }}>
-              <FontAwesome5 name="video" size={22} color={"white"} />
-              <MaterialIcons name="call" size={22} color={"white"} />
-              <MaterialCommunityIcons
-                name="dots-vertical"
-                size={22}
-                color={"white"}
-              />
-            </View>
-          ),
-        })}
-      /> */}
+      <Stack.Screen
+          name="ChatRoom"
+          component={ChatRoomScreen}
+          options={({route}) => ({
+            title: route.params.name,
+            headerRight: () => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: 100,
+                  justifyContent: 'space-between',
+                  marginRight: 10,
+                }}>
+                <FontAwesome5 name="video" size={22} color={"white"} />
+                <MaterialIcons name="call" size={22} color={"white"} />
+                <MaterialCommunityIcons
+                  name="dots-vertical"
+                  size={22}
+                  color={"white"}
+                />
+              </View>
+            ),
+          })}
+        />
       {/* <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
