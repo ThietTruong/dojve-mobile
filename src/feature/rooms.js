@@ -8,10 +8,17 @@ export const roomSlide = createSlice({
     setRooms: (state, action) => {
       state.rooms = action.payload;
     },
+    addRoom: (state, action) => {
+      state.rooms = [...state.rooms, action.payload];
+    },
     roomActive: (state, action) => {
       state.rooms = state.rooms.map(room => {
-        if (room._id === action.payload._id)
-          room.status = action.payload.status;
+        if (room._id === action.payload.room)
+          room.members = room.members.map(mem => {
+            if (mem._id === action.payload.user)
+              mem.status = action.payload.status;
+            return mem;
+          });
         return room;
       });
     },

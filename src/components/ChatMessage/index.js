@@ -15,7 +15,7 @@ function ChatMessage(props) {
         style={[
           style.messageBox,
           {
-            backgroundColor: isMessage ? '#DCF8C5' : '#fff',
+            backgroundColor: isMessage ? '#00AD9B' : '#fff',
             marginLeft: isMessage ? 50 : 0,
             marginRight: isMessage ? 0 : 50,
           },

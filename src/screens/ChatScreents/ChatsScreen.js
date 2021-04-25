@@ -8,7 +8,6 @@ import chatRooms from '../../data/ChatRooms';
 
 export default function ChatsScreen() {
   const [partner, setPartner] = useState();
-
   const rooms = useSelector(state => state.rooms.rooms);
   const user = useSelector(state => state.user.current);
   return (

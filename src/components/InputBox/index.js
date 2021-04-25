@@ -52,7 +52,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
         if (r) console.log(r);
       },
     );
-    // setMessageInput('');
+    setMessageInput('');
   };
   const onPress = () => {
     if (!message) {
@@ -90,16 +90,16 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
           onChangeText={onTextChange}
         />
         <Entypo name="attachment" size={24} color="grey" style={styles.icon} />
-        {!message && (
+        {!messageInput && (
           <Fontisto name="camera" size={24} color="grey" style={styles.icon} />
         )}
       </View>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.buttonContainer}>
-          {!message ? (
-            <MaterialCommunityIcons name="microphone" size={24} color="grey" />
+          {!messageInput ? (
+            <MaterialCommunityIcons name="microphone" size={24} color="white" />
           ) : (
-            <MaterialIcons name="send" size={24} color="gray" />
+            <MaterialIcons name="send" size={24} color="white" />
           )}
         </View>
       </TouchableOpacity>

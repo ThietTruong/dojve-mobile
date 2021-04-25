@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 50,
     marginRight: 15,
-    backgroundColor: '#0c6157',
+    backgroundColor: '#01ad9b',
   },
   username: {
     fontWeight: 'bold',
