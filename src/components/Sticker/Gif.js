@@ -1,5 +1,5 @@
 import {Searchbar} from 'react-native-paper';
-import {ScrollView , TextInput, StyleSheet, KeyboardAvoidingView,View,FlatList,Image, Modal} from 'react-native';
+import {ScrollView ,TouchableHighlight, TextInput, StyleSheet, KeyboardAvoidingView,View,FlatList,Image, Modal} from 'react-native';
 import axios from "../../utility/axios";
 import { debounce } from "lodash";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -121,14 +121,16 @@ return (
         numColumns={5}
         columnWrapperStyle={styles.row}
         data={gifs}
-        renderItem={({item}) => {
-         return <Image
-            key={item.id}
-            resizeMode='contain'
-            style={styles.image}
-            source={{uri: item.images.original.url}}
-            onClick={() => sendAGif(item.images.original.url)}
-          />  }
+        renderItem={({item}) => (
+          <TouchableHighlight onPress={() => sendAGif(item.images.original.url)}>
+          <Image
+             key={item.id}
+             resizeMode='contain'
+             style={styles.image}
+             source={{uri: item.images.original.url}}
+           />
+           </TouchableHighlight>  
+          )
         }
       />
     </ScrollView>

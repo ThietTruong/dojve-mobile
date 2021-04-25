@@ -27,20 +27,21 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
   const [newMessage, setNewMessage] = useState();
   const [messageInput, setMessageInput] = useState('');
   const [typing, setTyping] = useState(false);
+  const [tabSelected, setTabSelected] = useState(1);
   // useEffect(() => {
   //   getTrendingGif(setGif)
   // },[]);
   const onMicrophonePress = () => {
     console.warn('On Microphone');
   };
-  const onSendPress = () => {
+  const onSendPress = (type, content, to = idRoom, sender = idUser) => {
     const sendMessage = {
-      type: 0,
-      content: messageInput,
-      to: idRoom,
-      sender: idUser,
+      type,
+      content,
+      to,
+      sender,
     };
-    // setMessages(old => [...old, sendMessage]);
+    setNewMessage(old => [...old, sendMessage]);
     newListMessage(messageInput);
     socket.emit(
       'messages',
@@ -72,14 +73,9 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
       onSendPress();
     }
   };
-  const state = {
-    currentTab: 1
-  };
 
   const onTabClick = (currentTab) => {
-    const setState = ({
-      currentTab: currentTab,
-    })
+    setTabSelected(currentTab);
   }
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -102,10 +98,8 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
-      <TouchableOpacity onPress={() => setModalSticker(true)}>
-      <MaterialCommunityIcons name="sticker" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
-      <MaterialCommunityIcons name="gif" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+      <MaterialCommunityIcons name="star" size={28} color="gray"></MaterialCommunityIcons></TouchableOpacity>
         <TextInput
           placeholder={'Type a message'}
           style={styles.textIput}
@@ -149,7 +143,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>
                    <TouchableOpacity onPress={() => onTabClick(1)}
-                    state={state.currentTab === 1}
+                    state={tabSelected === 1}
                     style={styles.tabTextStyle}
                    >
                   <MaterialCommunityIcons name="gif" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
@@ -167,22 +161,22 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>
                   <TouchableOpacity onPress={() => onTabClick(2)}
-                    state={state.currentTab === 2}
+                    state={tabSelected === 2}
                     style={styles.tabTextStyle}
                    >
                   <MaterialCommunityIcons name="sticker" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   </View>
-                  {state.currentTab === 1 && (
+                  {tabSelected === 1 && (
                      <View style={{height: '50%',
                        marginTop: 'auto'}}>
-          <Gif/>
+          <Gif sendAMessage={onSendPress}/>
         </View>
                 )}
-                {state.currentTab === 2 && (
+                {tabSelected === 2 && (
                      <View style={{height: '50%',
                       marginTop: 'auto'}}>
-                      <Sticker/>
+                      <Sticker sendAMessage = {onSendPress}/>
                   </View>               
                 )}
                 <Pressable

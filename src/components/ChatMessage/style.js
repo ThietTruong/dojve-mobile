@@ -20,5 +20,19 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     color: 'gray',
   },
+  image: {
+    width: 90,
+    height: 90,
+    borderWidth: 3,
+    marginBottom: 5,
+    alignItems: 'center'
+  },
+  imgContainer:{
+    backgroundColor: '#e5e5e5',
+    marginLeft: '72%',
+    borderColor: 'white',
+    borderRadius: 2,
+    padding: 'auto'
+  }
 });
 export default styles;

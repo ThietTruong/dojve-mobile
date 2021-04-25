@@ -3,7 +3,7 @@ import {Searchbar} from 'react-native-paper';
 import { useSelector } from "react-redux";
 import { debounce } from "lodash";
 import axios from "../../utility/axios";
-import {ScrollView ,Button, TextInput, StyleSheet, KeyboardAvoidingView,View,FlatList,Image, Modal,Tooltip} from 'react-native';
+import {ScrollView ,Button, TextInput, StyleSheet, KeyboardAvoidingView,View,FlatList,Image, Modal,Tooltip, TouchableHighlight} from 'react-native';
 import {SkeletonPlaceholder} from "react-native-skeleton-placeholder";
 
 export default function Sticker({ sendAMessage }) {
@@ -66,11 +66,13 @@ export default function Sticker({ sendAMessage }) {
         numColumns={5}
         data={stickers}
         renderItem={({item}) => (
+          <TouchableHighlight  onPress={() => sendSticker(item.stickerImg.url)}>
           <Image
             resizeMode='contain'
             style={styles.image}
             source={{uri: item.stickerImg}}
           />
+          </TouchableHighlight>
         )}
       />
   </View>
