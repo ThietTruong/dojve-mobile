@@ -19,7 +19,6 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-// import axios from '../utility/axios';
 const SignInScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({
@@ -89,6 +88,7 @@ const SignInScreen = ({navigation}) => {
         console.log(data);
       }
     });
+    //
   }, []);
   const handleSignIn = () => {
     axios

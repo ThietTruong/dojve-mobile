@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   messageBox: {
-    backgroundColor: '#e5e5e5',
+    backgroundColor: '#01ad9b',
     marginRight: 50,
     borderRadius: 5,
     padding: 10,
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   message: {},
   time: {
     alignSelf: 'flex-end',
-    color: 'gray',
+    color: '#555555',
   },
   image: {
     width: 90,

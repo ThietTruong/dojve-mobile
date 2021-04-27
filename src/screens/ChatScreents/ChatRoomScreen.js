@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, ImageBackground, View, Text} from 'react-native';
+import {FlatList, ImageBackground, View, Text, StyleSheet} from 'react-native';
 import ChatMessage from '../../components/ChatMessage';
 import InputBox from '../../components/InputBox';
 import axios from '../../utility/axios';
@@ -31,24 +31,23 @@ const ChatRoomScreen = ({route, navigation}) => {
           break;
         case 'RECEIVE':
           let newMessage = data.message;
-          console.log('mesg new', data.message);
           if (newMessage.sender === idUser) break;
-          else setMessages(old => [...old, newMessage]);
+          else setMessages(old => [newMessage, ...old]);
           break;
         default:
           break;
       }
     });
   }, [socket, idUser]);
-  const newListMessage = val => {
-    if (val !== '') {
+  const newListMessage = (type, content, to = idRoom, sender = idUser) => {
+    if (content !== '') {
       const sendMessage = {
-        type: 0,
-        content: val,
-        to: idRoom,
-        sender: idUser,
+        type,
+        content,
+        to,
+        sender,
       };
-      setMessages(old => [...old, sendMessage]);
+      setMessages(old => [sendMessage, ...old]);
     }
   };
   return (
@@ -58,11 +57,23 @@ const ChatRoomScreen = ({route, navigation}) => {
         height: '100%',
       }}
       source={BG}>
+      {/* <View style={styles.container}>
+        <View>
+          <Text>left1</Text>
+        </View>
+        <View>
+          <Text>right</Text>
+        </View>
+      </View> */}
       <FlatList
         data={messages}
         renderItem={({item}) => <ChatMessage message={item} idUser={idUser} />}
         inverted
+        keyExtractor={message => {
+          message._id;
+        }}
       />
+
       <InputBox
         newListMessage={newListMessage}
         message={messages}
@@ -73,3 +84,12 @@ const ChatRoomScreen = ({route, navigation}) => {
   );
 };
 export default ChatRoomScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    height: 20,
+    backgroundColor: '#01ad9b',
+  },
+});

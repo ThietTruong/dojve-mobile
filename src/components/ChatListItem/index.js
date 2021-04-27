@@ -26,6 +26,7 @@ function ChatListItem(props) {
       idUser: idUser,
       partner: partner,
       idRoom: room._id,
+      userName: partner.name,
     });
     // console.warn('click on', user.name);
   };
@@ -34,12 +35,12 @@ function ChatListItem(props) {
     <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
-          <Image source={{uri: 'null'}} style={styles.avatar} />
+          <Image source={{url: 'null'}} style={styles.avatar} />
 
           <View style={styles.midContainer}>
             <Text style={styles.username}>{partner ? partner.name : ''}</Text>
             <Text numberOfLines={2} style={styles.lastMessage}>
-              {room.lastMessage.content}
+              {room.lastMessage ? room.lastMessage.content : 'Start chat now !'}
             </Text>
           </View>
         </View>

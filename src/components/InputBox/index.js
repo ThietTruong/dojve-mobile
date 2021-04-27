@@ -39,9 +39,9 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
       type,
       content,
       to,
-      sender,
+      sender
     };
-    setNewMessage(old => [...old, sendMessage]);
+    // setNewMessage(old => [...old, sendMessage]);
     newListMessage(messageInput);
     socket.emit(
       'messages',
@@ -64,7 +64,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
         if (r) console.log(r);
       },
     );
-    // setMessageInput('');
+    setMessageInput('');
   };
   const onPress = () => {
     if (!message) {
@@ -109,7 +109,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
           onChangeText={onTextChange}
         />
         <Entypo name="attachment" size={24} color="grey" style={styles.icon} />
-        {!message && (
+        {!messageInput && (
           <Fontisto name="camera" size={24} color="grey" style={styles.icon} />
         )}
       </View>
@@ -130,16 +130,6 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
         style={styles.containerStyle}
         >
                 <View style={styles.tabs}>
-                  {/* <Text
-                    onPress={() => {
-                     onTabClick(1);
-                    }}
-                    style={[
-                      styles.tabTextStyle,
-                      state.currentTab === 1 ? styles.tabUnderline : null,
-                    ]}>
-                   GIF
-                  </Text> */}
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>
                    <TouchableOpacity onPress={() => onTabClick(1)}
@@ -148,16 +138,6 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                    >
                   <MaterialCommunityIcons name="gif" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
-                  {/* <Text
-                    onPress={() => {
-                      onTabClick(2);
-                    }}
-                    style={[
-                      styles.tabTextStyle,
-                      state.currentTab === 2 ? styles.tabUnderline : null,
-                    ]}>
-                    LOCATION
-                  </Text> */}
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>
                   <TouchableOpacity onPress={() => onTabClick(2)}
@@ -185,24 +165,6 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
               />
                   </Modal>
                   </View>
-              
-        {/* <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        style={styles.containerStyle}
-        >
-          <View style={{height: '50%',
-      marginTop: 'auto'}}>
-          <Sticker/>
-          <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalSticker(!modalSticker)}
-              />
-        </View>
-        </Modal>
-        </View> */}
     </View>
   );
 };

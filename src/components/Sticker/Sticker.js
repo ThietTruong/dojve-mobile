@@ -66,7 +66,7 @@ export default function Sticker({ sendAMessage }) {
         numColumns={5}
         data={stickers}
         renderItem={({item}) => (
-          <TouchableHighlight  onPress={() => sendSticker(item.stickerImg.url)}>
+          <TouchableHighlight  onPress={() => sendSticker(item.stickerImg)}>
           <Image
             resizeMode='contain'
             style={styles.image}
