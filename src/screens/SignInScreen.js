@@ -88,9 +88,9 @@ const SignInScreen = ({navigation}) => {
         console.log(data);
       }
     });
-    //
   }, []);
   const handleSignIn = () => {
+    console.log('acout2 = ', account);
     axios
       .post('auth/signin', account)
       .then(async res => {

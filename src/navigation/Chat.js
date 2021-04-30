@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainTabNavigator from './MainTabNavigator';
 import ChatRoomScreen from '../screens/ChatScreents/ChatRoomScreen';
 import UserDetail from '../screens/UserDetail';
+import VideoCallScreen from '../screens/VideoCallScreens';
 
 const Stack = createStackNavigator();
 export default function Chat({navigation, route}) {
@@ -48,6 +49,9 @@ export default function Chat({navigation, route}) {
   );
   const handlePressSetting = () => {
     navigation.navigate('UserDetail', {userName: user.name});
+  };
+  const handleOnpressVideoCall = () => {
+    navigation.navigate('VideoCallScreen', {user: user});
   };
   return (
     <Stack.Navigator
@@ -118,13 +122,19 @@ export default function Chat({navigation, route}) {
                 justifyContent: 'space-between',
                 marginRight: 10,
               }}>
-              <FontAwesome5 name="video" size={22} color={'white'} />
-              <MaterialIcons name="call" size={22} color={'white'} />
-              <MaterialCommunityIcons
-                name="dots-vertical"
-                size={22}
-                color={'white'}
-              />
+              <TouchableOpacity onPress={handleOnpressVideoCall}>
+                <FontAwesome5 name="video" size={22} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialIcons name="call" size={22} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="dots-vertical"
+                  size={22}
+                  color={'white'}
+                />
+              </TouchableOpacity>
             </View>
           ),
         })}
@@ -133,6 +143,14 @@ export default function Chat({navigation, route}) {
         name="InviteFriends"
         component={InviteFriends}
         title="InviteFriends"
+      />
+      <Stack.Screen
+        name="VideoCallScreen"
+        component={VideoCallScreen}
+        title="Video call"
+        options={({route}) => ({
+          title: route.params.user.name,
+        })}
       />
       {/* <Stack.Screen
         name="ChatRoom"

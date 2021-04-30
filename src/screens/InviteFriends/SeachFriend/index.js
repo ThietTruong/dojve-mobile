@@ -9,18 +9,7 @@ const SeachFriend = () => {
   };
   return (
     <View style={styles.container}>
-      <SearchBar
-        placeholder="Type Here..."
-        onChangeText={val => handleChangeSearch(val)}
-        value={search}
-        inputStyle={{backgroundColor: 'white'}}
-        containerStyle={{
-          backgroundColor: 'white',
-          borderWidth: 1,
-          borderRadius: 5,
-        }}
-        placeholderTextColor={'#g5g5g5'}
-      />
+      <Text>123</Text>
     </View>
   );
 };

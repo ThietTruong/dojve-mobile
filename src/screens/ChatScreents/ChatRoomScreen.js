@@ -69,9 +69,7 @@ const ChatRoomScreen = ({route, navigation}) => {
         data={messages}
         renderItem={({item}) => <ChatMessage message={item} idUser={idUser} />}
         inverted
-        keyExtractor={message => {
-          message._id;
-        }}
+        keyExtractor={message => message._id}
       />
 
       <InputBox

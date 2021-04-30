@@ -28,7 +28,6 @@ function ChatListItem(props) {
       idRoom: room._id,
       userName: partner.name,
     });
-    // console.warn('click on', user.name);
   };
 
   return (

@@ -1,10 +1,7 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {Provider} from 'react-redux';
-
 import {StyleSheet, View, Text} from 'react-native';
-
 import {NavigationContainer} from '@react-navigation/native';
-
 import RootStackScreen from './src/screens/RootStackScreen';
 import store from './src/app/store';
 import NothingScreen from './src/utility/NothingScreen';
