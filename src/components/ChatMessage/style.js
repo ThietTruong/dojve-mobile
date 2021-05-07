@@ -28,10 +28,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imgContainer:{
-    backgroundColor: '#e5e5e5',
     marginLeft: '72%',
-    borderColor: 'white',
-    borderRadius: 2,
     padding: 'auto'
   }
 });

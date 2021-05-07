@@ -108,16 +108,15 @@ function Gif({ sendAMessage }) {
     }
   };
 return (
-    <View style={styles.container}>
-  <ScrollView backgroundColor="white">
+    <View style={styles.view}>
     <Searchbar
+          placeholder="Search GIFs"
+          placeholderTextColor='black'
           style ={styles.input}
           value={keyword}
           onChange={onSearchGif}
-          placeholder="Search gifs"
         />
       <FlatList
-        style = {styles.FlatList}
         numColumns={5}
         columnWrapperStyle={styles.row}
         data={gifs}
@@ -133,7 +132,6 @@ return (
           )
         }
       />
-    </ScrollView>
     </View>
     )
 }
@@ -143,6 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     backgroundColor: '#FFFFFF',
+    flexDirection: "column"
   },
   textInput: {
     width: '100%',
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderWidth: 3,
-    marginBottom: 5,
+    margin: "auto",
     justifyContent: "space-evenly"
   },
   centeredView: {

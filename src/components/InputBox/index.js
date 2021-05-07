@@ -163,8 +163,8 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
               />
-                  </Modal>
-                  </View>
+          </Modal>
+          </View>
     </View>
   );
 };

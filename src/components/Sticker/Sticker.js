@@ -56,7 +56,7 @@ export default function Sticker({ sendAMessage }) {
   return (
     <View style={styles.view}>
      <Searchbar
-        placeholder="Search Giphy"
+        placeholder="Search Sticker"
         placeholderTextColor='black'
         style={styles.textInput}
         value={keyword}
@@ -64,6 +64,7 @@ export default function Sticker({ sendAMessage }) {
       />
       <FlatList
         numColumns={5}
+        columnWrapperStyle={styles.row}
         data={stickers}
         renderItem={({item}) => (
           <TouchableHighlight  onPress={() => sendSticker(item.stickerImg)}>
