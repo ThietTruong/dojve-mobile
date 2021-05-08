@@ -21,13 +21,12 @@ const styles = StyleSheet.create({
     color: '#555555',
   },
   image: {
-    width: 90,
-    height: 90,
-    borderWidth: 3,
     marginBottom: 5,
     alignItems: 'center'
   },
   imgContainer:{
+    width: 90,
+    height: 90,
     marginLeft: '72%',
     padding: 'auto'
   }

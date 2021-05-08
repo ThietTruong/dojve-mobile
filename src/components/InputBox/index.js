@@ -136,7 +136,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                     state={tabSelected === 1}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="gif" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="gif" size={24} color="gray" borderColor="gray"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>

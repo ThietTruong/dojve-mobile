@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import axios from "../../utility/axios";
 import {ScrollView ,Button, TextInput, StyleSheet, KeyboardAvoidingView,View,FlatList,Image, Modal,Tooltip, TouchableHighlight} from 'react-native';
 import {SkeletonPlaceholder} from "react-native-skeleton-placeholder";
-
+import Skeleton from "react-loading-skeleton";
 export default function Sticker({ sendAMessage }) {
   const user = useSelector((state) => state.user.current);
   const [packages, setPackages] = useState(undefined);
@@ -69,6 +69,7 @@ export default function Sticker({ sendAMessage }) {
         renderItem={({item}) => (
           <TouchableHighlight  onPress={() => sendSticker(item.stickerImg)}>
           <Image
+            key={item.id}
             resizeMode='contain'
             style={styles.image}
             source={{uri: item.stickerImg}}
