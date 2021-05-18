@@ -62,8 +62,8 @@ return (
           onChange={onSearchGif}
         />
       <FlatList
+        style={{margin:4}}
         numColumns={5}
-        columnWrapperStyle={styles.row}
         data={gifs}
         renderItem={({item}) => (
           <TouchableHighlight onPress={() => sendAGif(item.images.original.url)}>
@@ -81,27 +81,22 @@ return (
 }
 const styles = StyleSheet.create({
   view: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#FFFFFF',
-    flexDirection: "column"
+    flex: 1, 
+    margin: 5, 
+    backgroundColor: 'white'
   },
   textInput: {
     width: '100%',
     height: 50,
     color: 'white'
   },
-  row: {
-    flex: 1,
-    justifyContent: "space-evenly"
-  },
   image: {
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
+    borderRadius: 2,
     borderWidth: 3,
     margin: "auto",
-    justifyContent: "space-evenly"
+    padding: 5,
   },
   centeredView: {
     flex: 1,

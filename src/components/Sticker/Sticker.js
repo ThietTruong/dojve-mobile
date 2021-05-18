@@ -64,7 +64,7 @@ export default function Sticker({ sendAMessage }) {
       />
       <FlatList
         numColumns={5}
-        columnWrapperStyle={styles.row}
+        style={{margin:4}}
         data={stickers}
         renderItem={({item}) => (
           <TouchableHighlight  onPress={() => sendSticker(item.stickerImg)}>
@@ -83,11 +83,9 @@ export default function Sticker({ sendAMessage }) {
 
 const styles = StyleSheet.create({
   view: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'column'
+    flex: 1, 
+    margin: 5, 
+    backgroundColor: 'white'
   },
   textInput: {
     width: '100%',
@@ -99,8 +97,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly"
   },
   image: {
-    width: 90,
-    height: 90,
+    width: 100,
+    height: 100,
     borderWidth: 3,
     marginBottom: 5,
     justifyContent: "space-evenly"

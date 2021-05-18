@@ -11,6 +11,8 @@ import {
 import { Portal, Provider } from 'react-native-paper';
 import Gif from '../Sticker/Gif';
 import Sticker from '../Sticker/Sticker';
+import ImageAndVideo from '../ImageAndVideo/index';
+import CameraRoll from '../ImageAndVideo/CameraRoll';
 import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -146,6 +148,14 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                    >
                   <MaterialCommunityIcons name="sticker" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
+                  <View style={{height: '23%',
+                      marginTop: 'auto'}}>
+                  <TouchableOpacity onPress={() => onTabClick(3)}
+                    state={tabSelected === 3}
+                    style={styles.tabTextStyle}
+                   >
+                  <MaterialCommunityIcons name="media" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  </View>
                   </View>
                   {tabSelected === 1 && (
                      <View style={{height: '50%',
@@ -157,6 +167,12 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                      <View style={{height: '50%',
                       marginTop: 'auto'}}>
                       <Sticker sendAMessage = {onSendPress}/>
+                  </View>               
+                )}
+                {tabSelected === 3 && (
+                     <View style={{height: '50%',
+                      marginTop: 'auto'}}>
+                      <ImageAndVideo sendAMessage = {onSendPress}/>
                   </View>               
                 )}
                 <Pressable
