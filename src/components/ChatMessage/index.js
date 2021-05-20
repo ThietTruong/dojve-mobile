@@ -6,7 +6,7 @@ import style from './style';
 
 function ChatMessage(props) {
   const {message, idUser} = props;
-  const isMessage = message.sender == idUser;
+  const isMessage = message.sender._id == idUser || message.sender == idUser;
   const socket = useSelector(state => state.socket.current);
 
   return (

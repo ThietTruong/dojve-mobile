@@ -11,20 +11,56 @@ import MainTabNavigator from './MainTabNavigator';
 import ChatRoomScreen from '../screens/ChatScreents/ChatRoomScreen';
 import UserDetail from '../screens/UserDetail';
 import VideoCallScreen from '../screens/VideoCallScreens';
-
+import axios from '../utility/axios';
+// import {setPartner} from '../feature/partner';
 const Stack = createStackNavigator();
 export default function Chat({navigation, route}) {
+  const socket = useSelector(state => state.socket.current);
+  const [calling, setCalling] = useState({
+    status: false,
+    id: '',
+    sid: '',
+    caller: {name: '', avatar: ''},
+    video: '',
+  });
   // http://10.0.2.2:5000
-
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user.current);
-
+  const [partner, setPartner] = useState();
   const handleLeaveChat = async action => {
     navigation.dispatch(action);
     try {
       await AsyncStorage.setItem('userToken', '');
     } catch (e) {}
   };
-  React.useEffect(
+  useEffect(() => {
+    socket.on('videocall', data => {
+      if (data.action == 'RECEIVE') {
+        // setCalling({
+        //   status: true,
+        //   id: data.roomId,
+        //   sid: data.sid,
+        //   caller: data.caller,
+        //   video: data.video,
+        // });
+        console.log("day la data: ",data);
+        axios
+          .get(`/call/joinRoom?sid=${data.sid}`)
+          .then(res => {
+            const {data} = res;
+            console.log('get token resoponse', data);
+            navigation.navigate('VideoCallScreen', {
+              user: user,
+              token: data.token,
+              video: true,
+              roomid: user.name,
+            });
+          })
+          .catch(err => console.log('reject', err.msg));
+      }
+    });
+  }, [socket]);
+  useEffect(
     () =>
       navigation.addListener('beforeRemove', e => {
         // Prevent default behavior of leaving the screen
@@ -50,9 +86,37 @@ export default function Chat({navigation, route}) {
   const handlePressSetting = () => {
     navigation.navigate('UserDetail', {userName: user.name});
   };
-  const handleOnpressVideoCall = () => {
-    navigation.navigate('VideoCallScreen', {user: user});
+  const handleOnpressVideoCall = roomid => {
+    axios
+      .get(`/call/getToken?roomid=${roomid}`)
+      .then(res => {
+        const {data} = res;
+        if (!data.error && data.error !== undefined) {
+          socket.emit(
+            'videocall',
+            {
+              action: 'startCall',
+              aToken: data.token,
+              roomId: roomid,
+              sid: data.roomSID,
+              video: true,
+            },
+            (error, msg) => {
+              if (error) console.log(error);
+              console.log(msg);
+            },
+          );
+          navigation.navigate('VideoCallScreen', {
+            user: user,
+            token: data.token,
+            video: true,
+            roomid: roomid,
+          });
+        }
+      })
+      .catch(err => console.log(err));
   };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -93,51 +157,53 @@ export default function Chat({navigation, route}) {
       <Stack.Screen
         name="UserDetail"
         component={UserDetail}
-        options={({route}) => (
-          console.log(route.params.userName),
-          {
-            title: route.params.userName,
-            headerRight: () => (
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  width: 60,
-                  justifyContent: 'space-between',
-                  marginRight: 5,
-                }}></TouchableOpacity>
-            ),
-          }
-        )}
+        options={({route}) => ({
+          title: route.params.userName,
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                width: 60,
+                justifyContent: 'space-between',
+                marginRight: 5,
+              }}></TouchableOpacity>
+          ),
+        })}
       />
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
-        options={({route}) => ({
-          title: route.params.userName,
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: 'row',
-                width: 100,
-                justifyContent: 'space-between',
-                marginRight: 10,
-              }}>
-              <TouchableOpacity onPress={handleOnpressVideoCall}>
-                <FontAwesome5 name="video" size={22} color={'white'} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="call" size={22} color={'white'} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialCommunityIcons
-                  name="dots-vertical"
-                  size={22}
-                  color={'white'}
-                />
-              </TouchableOpacity>
-            </View>
-          ),
-        })}
+        options={({route}) => (
+          console.log('route', route.params),
+          setPartner(route.params.partner),
+          {
+            title: route.params.userName,
+            headerRight: () => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: 100,
+                  justifyContent: 'space-between',
+                  marginRight: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => handleOnpressVideoCall(route.params.idRoom)}>
+                  <FontAwesome5 name="video" size={22} color={'white'} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <MaterialIcons name="call" size={22} color={'white'} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <MaterialCommunityIcons
+                    name="dots-vertical"
+                    size={22}
+                    color={'white'}
+                  />
+                </TouchableOpacity>
+              </View>
+            ),
+          }
+        )}
       />
       <Stack.Screen
         name="InviteFriends"
@@ -149,7 +215,7 @@ export default function Chat({navigation, route}) {
         component={VideoCallScreen}
         title="Video call"
         options={({route}) => ({
-          title: route.params.user.name,
+          title: route.params.user.name ? route.params.user.name : partner.name,
         })}
       />
       {/* <Stack.Screen

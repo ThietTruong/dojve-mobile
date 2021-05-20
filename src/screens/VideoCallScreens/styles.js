@@ -40,13 +40,15 @@ export default {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    // backgroundColor:"red"
   },
   remoteVideo: {
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
+    marginTop: 1,
+    marginLeft: 1,
+    marginRight: 1,
+    borderRadius:20,
     width: 100,
-    height: 120,
+    height: 100,
   },
   optionsContainer: {
     position: 'absolute',

@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import RootStackScreen from './src/screens/RootStackScreen';
 import store from './src/app/store';
 import NothingScreen from './src/utility/NothingScreen';
+import Typing from './src/utility/Typing';
 
 const App = () => {
   return (

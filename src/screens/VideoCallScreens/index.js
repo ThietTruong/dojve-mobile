@@ -17,6 +17,7 @@ import {
   TwilioVideoParticipantView,
   TwilioVideo,
 } from 'react-native-twilio-video-webrtc';
+import {useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionions from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -25,14 +26,15 @@ import styleSheet from './styles';
 const styles = StyleSheet.create(styleSheet);
 
 const VideoCallScreen = props => {
-  const {navigation} = props;
+ 
+  const {navigation,route} = props;
+  const {token,user,roomId} = route.params;
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [status, setStatus] = useState('disconnected');
   // const [status, setStatus] = useState('connected');
   const [participants, setParticipants] = useState(new Map());
   const [videoTracks, setVideoTracks] = useState(new Map());
-  const [token, setToken] = useState('');
   const twilioVideo = useRef(null);
 
   const _onConnectButtonPress = async () => {
@@ -43,6 +45,7 @@ const VideoCallScreen = props => {
     twilioVideo.current.connect({
       accessToken: token,
       enableNetworkQualityReporting: true,
+      roomName: roomId
     });
     setStatus('connecting');
   };
@@ -85,7 +88,7 @@ const VideoCallScreen = props => {
         ...videoTracks,
         [
           track.trackSid,
-          {participantSid: participant.sid, videoTrackSid: track.trackSid},
+          {enabled: true,participantSid: participant.sid, videoTrackSid: track.trackSid},
         ],
       ]),
     );
@@ -101,14 +104,7 @@ const VideoCallScreen = props => {
   };
 
   const _onNetworkLevelChanged = ({participant, isLocalUser, quality}) => {
-    console.log(
-      'Participant',
-      participant,
-      'isLocalUser',
-      isLocalUser,
-      'quality',
-      quality,
-    );
+      console.log(participant);
   };
 
   const _requestAudioPermission = () => {
@@ -133,6 +129,7 @@ const VideoCallScreen = props => {
     });
   };
   useEffect(() => {
+    console.log("loz ccac")
     _onConnectButtonPress();
   }, []);
   useEffect(
@@ -154,6 +151,7 @@ const VideoCallScreen = props => {
       }),
     [navigation],
   );
+
   const handleLeave = async () => {
     await navigation.goBack();
     await _onConnectButtonPress();
@@ -180,12 +178,17 @@ const VideoCallScreen = props => {
           {status === 'connected' && (
             <View style={styles.remoteGrid}>
               {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
+                console.log("loz cc duma may");
+                console.log("track: ",trackIdentifier);
                 return (
+                  <View  key={trackSid}>
                   <TwilioVideoParticipantView
-                    style={styles.remoteVideo}
-                    key={trackSid}
-                    trackIdentifier={trackIdentifier}
+                  style={styles.remoteVideo}
+                    trackIdentifier={{...trackIdentifier,enabled:true}}
+                    enabled={true}
+                    scaleType="fill"
                   />
+                  </View>
                 );
               })}
             </View>
@@ -214,9 +217,7 @@ const VideoCallScreen = props => {
             <LinearGradient
               colors={['#DA3344', '#CF1843']}
               style={styles.optionButton}>
-              <TouchableOpacity
-                // onPress={_onEndButtonPress}
-                onPress={() => handleLeave()}>
+              <TouchableOpacity onPress={() => handleLeave()}>
                 <Text style={{fontSize: 12}}>
                   <FontAwesome5 name="phone-slash" size={22} color="#fff" />
                 </Text>
@@ -258,3 +259,5 @@ const VideoCallScreen = props => {
 
 // AppRegistry.registerComponent('Example', () => Example);
 export default VideoCallScreen;
+
+

@@ -14,7 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-const InputBox = ({idUser, idRoom, message, newListMessage}) => {
+const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
   const socket = useSelector(state => state.socket.current);
   const [newMessage, setNewMessage] = useState();
   const [messageInput, setMessageInput] = useState('');
@@ -27,7 +27,11 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
       type: 0,
       content: messageInput,
       to: idRoom,
-      sender: idUser,
+      sender: {
+        name: user.name,
+        _id: user._id,
+        email: user.email,
+      },
     };
     // setMessages(old => [...old, sendMessage]);
     newListMessage(messageInput);

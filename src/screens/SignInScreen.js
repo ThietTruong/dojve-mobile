@@ -66,31 +66,30 @@ const SignInScreen = ({navigation}) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
-  useEffect(() => {
-    axios.get('/auth/signinW').then(async res => {
-      const {data} = res;
-      if (!data.error) {
-        let user = data.user;
-        user.token = data.token;
-        dispatch(setUser(user));
-        dispatch(connectSocket(data.token));
-        axios
-          .get(`/rooms?token=${data.token}`)
-          .then(res => {
-            dispatch(setRooms(res.data.rooms));
-          })
-          .catch(err => {
-            console.log(err);
-          });
-        await AsyncStorage.setItem('userToken', data.token);
-        navigation.navigate('Chat');
-      } else {
-        console.log(data);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get('/auth/signinW').then(async res => {
+  //     const {data} = res;
+  //     if (!data.error) {
+  //       let user = data.user;
+  //       user.token = data.token;
+  //       dispatch(setUser(user));
+  //       dispatch(connectSocket(data.token));
+  //       axios
+  //         .get(`/rooms?token=${data.token}`)
+  //         .then(res => {
+  //           dispatch(setRooms(res.data.rooms));
+  //         })
+  //         .catch(err => {
+  //           console.log(err);
+  //         });
+  //       await AsyncStorage.setItem('userToken', data.token);
+  //       navigation.navigate('Chat');
+  //     } else {
+  //       console.log(data);
+  //     }
+  //   });
+  // }, []);
   const handleSignIn = () => {
-    console.log('acout2 = ', account);
     axios
       .post('auth/signin', account)
       .then(async res => {
