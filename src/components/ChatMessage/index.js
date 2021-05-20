@@ -3,6 +3,7 @@ import moment from 'moment';
 import {View, Text,Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import style from './style';
+import Video from 'react-native-video'
 
 function ChatMessage(props) {
   const {message, idUser} = props;
@@ -26,12 +27,17 @@ function ChatMessage(props) {
           <Text style={style.message}>{message.content}</Text>
           <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ): (
+        ): ( message.type === 1 ? (
           <View style={style.imgContainer}>
           <Image style={style.image} source = {{uri: message.content}}/>
           <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        )
+        ) : (message.type === 2 ? (
+          <View style={style.imgContainer}>
+          <Video style={style.image} source = {{uri: message.content}}/>
+          <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
+          </View>
+        ) : null))
         }
       </View>
     </View>

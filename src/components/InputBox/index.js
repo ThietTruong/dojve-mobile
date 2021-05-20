@@ -12,7 +12,6 @@ import { Portal, Provider } from 'react-native-paper';
 import Gif from '../Sticker/Gif';
 import Sticker from '../Sticker/Sticker';
 import ImageAndVideo from '../ImageAndVideo/index';
-import CameraRoll from '../ImageAndVideo/CameraRoll';
 import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
