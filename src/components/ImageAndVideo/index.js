@@ -19,19 +19,12 @@ function ImageAndVideo ({sendAMessage}) {
   const handleChoosePhoto = () => {
     let option1 = {
       title: 'Chose Photo',
-      maxWidth: 300,
-      maxHeight: 300,
       noData: true,
-      mediaType: 'photo',
+      mediaType: 'image',
       storageOptions: {
-        skipBackup: true
+        skipBackup: true,
+        path: 'images'
       }
-    };
-    const options2 = {
-      title: 'Select video',
-      mediaType: 'video',
-      path:'video',
-      quality: 1
     };
 
     ImagePicker.launchImageLibrary(option1, response => {
@@ -53,15 +46,19 @@ function ImageAndVideo ({sendAMessage}) {
       quality: 1
     };
 
-    ImagePicker.launchImageLibrary(options2, response => {
+    ImagePicker.launchImageLibrary(options2, (response) => {
+      console.log('Response = ', response);
+      
       if (response.didCancel) {
-        console.log('User cancelled videp picker');
+        console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
       } else {
         setMedia(response.uri);
       }
-    });
+      });
   }
 
   // const handleChoosePhoto = () => {
@@ -137,25 +134,25 @@ function ImageAndVideo ({sendAMessage}) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' ,backgroundColor: 'white' }}>
-    {media ? (
+    {media == null ? (
         <TouchableHighlight onPress = {() => sending1(media)}>
         <Image
           source={{ uri: media }}
-          style={{ width: 300, height: 300 }}
+          style={{ width: 250, height: 250 }}
         />
         </TouchableHighlight>
     ) : (
     <TouchableHighlight onPress = {() => sending2(media)}>
     <Video
       source={{ uri: media }}
-      style={{ width: 300, height: 300 }}
+      style={{ width: 200, height: 250 ,alignItems: 'center'}}
     />
     </TouchableHighlight>)}
-    <View style={{ flexDirection:"row", alignItems: "space-between"}}>
-    <View>
-      <Button title="Choose Photo" onPress={handleChoosePhoto} style={{ marginHorizontal: 20, marginTop: 5 }}/>
+    <View style={{ flexDirection:"row", alignItems: "space-between", marginBottom: 20}}>
+    <View style={{ marginHorizontal: 20, marginLeft: 10, marginTop: 5 }}>
+      <Button title="Choose Photo" onPress={handleChoosePhoto} style={{ marginHorizontal: 20, marginLeft: 45, marginTop: 5 }}/>
     </View>
-    <View>
+    <View style={{ marginHorizontal: 20, marginTop: 5 }}>
       <Button title="Choose Video" onPress={handleChoosePhoto2} style={{ marginHorizontal: 20, marginTop: 5 }} />
     </View>
     </View>

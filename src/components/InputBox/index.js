@@ -153,7 +153,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
                     state={tabSelected === 3}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="media" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="image" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   </View>
                   {tabSelected === 1 && (

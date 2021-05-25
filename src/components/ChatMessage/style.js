@@ -18,18 +18,30 @@ const styles = StyleSheet.create({
   message: {},
   time: {
     alignSelf: 'flex-end',
+    marginBottom: 10,
     color: '#555555',
   },
   image: {
-    width: 90,
-    height: 90,
+    width: 130,
+    height: 130,
     marginBottom: 5,
     marginTop: 5,
   },
   imgContainer:{
-    width: 90,
-    height: 90,
-    marginLeft: '72%',
-  }
+    width: 140,
+    height: 150,
+    marginLeft: '65%',
+  },
+  videoContainer:{
+    width: 200,
+    height: 300,
+    marginLeft: '50%',
+  },
+  video: {
+    width: 200,
+    height: 280,
+    marginBottom: 5,
+    marginTop: 5,
+  },
 });
 export default styles;
