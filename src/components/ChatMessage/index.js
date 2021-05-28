@@ -8,7 +8,7 @@ import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 
 function ChatMessage(props) {
   const {message, idUser} = props;
-  const isMessage = message.sender == idUser;
+  const isMessage = message.sender._id == idUser || message.sender == idUser;
   const socket = useSelector(state => state.socket.current);
   const videoPlayer = useRef(null);
     const [duration, setDuration] = useState(0);

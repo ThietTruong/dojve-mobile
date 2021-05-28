@@ -31,8 +31,11 @@ const ChatRoomScreen = ({route, navigation}) => {
           break;
         case 'RECEIVE':
           let newMessage = data.message;
-          if (newMessage.sender === idUser) break;
-          else setMessages(old => [newMessage, ...old]);
+          if (newMessage.sender._id === idUser) break;
+          else {
+            setMessages(old => [newMessage, ...old]);
+            console.log('new msg', newMessage, 'msg old', messages);
+          }
           break;
         default:
           break;
@@ -42,11 +45,16 @@ const ChatRoomScreen = ({route, navigation}) => {
   const newListMessage = (type, content, to = idRoom, sender = idUser) => {
     if (content !== '') {
       const sendMessage = {
-        type,
-        content,
-        to,
-        sender,
+        type: 0,
+        content: val,
+        to: idRoom,
+        sender: {
+          name: user.name,
+          _id: user._id,
+          email: user.email,
+        },
       };
+      console.log('hihi', sendMessage);
       setMessages(old => [sendMessage, ...old]);
     }
   };
@@ -69,12 +77,11 @@ const ChatRoomScreen = ({route, navigation}) => {
         data={messages}
         renderItem={({item}) => <ChatMessage message={item} idUser={idUser} />}
         inverted
-        keyExtractor={message => {
-          message._id;
-        }}
+        keyExtractor={message => message._id}
       />
 
       <InputBox
+        user={user}
         newListMessage={newListMessage}
         message={messages}
         idRoom={idRoom}

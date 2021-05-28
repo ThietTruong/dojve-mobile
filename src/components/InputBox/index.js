@@ -20,10 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-const apiKey = "7oleYFqKiRberKvCCXQQDw0ki0IcmQfu";
-const ENDPOINT = "https://api.giphy.com/v1/gifs";
-
-const InputBox = ({idUser, idRoom, message, newListMessage}) => {
+const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
   const socket = useSelector(state => state.socket.current);
   const [newMessage, setNewMessage] = useState();
   const [messageInput, setMessageInput] = useState('');
@@ -37,10 +34,14 @@ const InputBox = ({idUser, idRoom, message, newListMessage}) => {
   };
   const onSendPress = (type, content, to = idRoom, sender = idUser) => {
     const sendMessage = {
-      type,
-      content,
-      to,
-      sender
+      type: 0,
+      content: messageInput,
+      to: idRoom,
+      sender: {
+        name: user.name,
+        _id: user._id,
+        email: user.email,
+      },
     };
     // setNewMessage(old => [...old, sendMessage]);
     newListMessage(messageInput);

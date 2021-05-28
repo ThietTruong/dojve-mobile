@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, Image, ImageBackground, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Watermelon from '../assets/images/Watermelon.png';
 import * as Animatable from 'react-native-animatable';
+
 const Nothing = () => {
   return (
     <View style={styles.container}>
@@ -18,6 +19,9 @@ const Nothing = () => {
 };
 export default Nothing;
 const styles = StyleSheet.create({
+  spinnerTextStyle: {
+    color: '#FFF',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',

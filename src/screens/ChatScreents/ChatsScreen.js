@@ -2,14 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, FlatList, View, Text} from 'react-native';
 import ChatListItem from '../../components/ChatListItem';
 import {useSelector} from 'react-redux';
-// import {Text, View} from '../components/Themed';
-import chatRooms from '../../data/ChatRooms';
-// import NewMessageButton from "../components/NewMessageButton";
 
 export default function ChatsScreen() {
-  const [partner, setPartner] = useState();
   const rooms = useSelector(state => state.rooms.rooms);
   const user = useSelector(state => state.user.current);
+  console.log("roommm neee",rooms)
   return (
     <View style={styles.container}>
       <FlatList
