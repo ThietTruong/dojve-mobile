@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -17,18 +17,19 @@ import {
   TwilioVideoParticipantView,
   TwilioVideo,
 } from 'react-native-twilio-video-webrtc';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionions from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
-import styleSheet from './styles';
-
-const styles = StyleSheet.create(styleSheet);
-
+// import styleSheet from './styles';
+import axios from '../../utility/axios';
+import { Dimensions } from 'react-native';
+const windowWidth = Dimensions.get('window').width / 2 - 5;
+const windowHeight = Dimensions.get('window').height / 2 - 5;
 const VideoCallScreen = props => {
- 
-  const {navigation,route} = props;
-  const {token,user,roomId} = route.params;
+
+  const { navigation, route } = props;
+  const { token, user, roomId } = route.params;
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [status, setStatus] = useState('disconnected');
@@ -68,7 +69,7 @@ const VideoCallScreen = props => {
     setStatus('connected');
   };
 
-  const _onRoomDidDisconnect = ({error}) => {
+  const _onRoomDidDisconnect = ({ error }) => {
     console.log('ERROR: ', error);
 
     setStatus('disconnected');
@@ -80,7 +81,7 @@ const VideoCallScreen = props => {
     setStatus('disconnected');
   };
 
-  const _onParticipantAddedVideoTrack = ({participant, track}) => {
+  const _onParticipantAddedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantAddedVideoTrack: ', participant, track);
 
     setVideoTracks(
@@ -88,13 +89,13 @@ const VideoCallScreen = props => {
         ...videoTracks,
         [
           track.trackSid,
-          {enabled: true,participantSid: participant.sid, videoTrackSid: track.trackSid},
+          { enabled: true, participantSid: participant.sid, videoTrackSid: track.trackSid },
         ],
       ]),
     );
   };
 
-  const _onParticipantRemovedVideoTrack = ({participant, track}) => {
+  const _onParticipantRemovedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantRemovedVideoTrack: ', participant, track);
 
     const videoTracks = new Map(videoTracks);
@@ -103,8 +104,8 @@ const VideoCallScreen = props => {
     setVideoTracks(videoTracks);
   };
 
-  const _onNetworkLevelChanged = ({participant, isLocalUser, quality}) => {
-      console.log(participant);
+  const _onNetworkLevelChanged = ({ participant, isLocalUser, quality }) => {
+
   };
 
   const _requestAudioPermission = () => {
@@ -129,7 +130,6 @@ const VideoCallScreen = props => {
     });
   };
   useEffect(() => {
-    console.log("loz ccac")
     _onConnectButtonPress();
   }, []);
   useEffect(
@@ -141,11 +141,12 @@ const VideoCallScreen = props => {
 
         // Prompt the user before leaving the screen
         Alert.alert('Conversation', 'Do you want to leave the conversation?', [
-          {text: 'Stay', style: 'cancel', onPress: () => {}},
+          { text: 'Stay', style: 'cancel', onPress: () => { } },
           {
             text: 'Leave',
             style: 'destructive',
-            onPress: () => navigation.dispatch(e.data.action),
+            onPress: () => { _onEndButtonPress(), navigation.dispatch(e.data.action) },
+
           },
         ]);
       }),
@@ -153,8 +154,10 @@ const VideoCallScreen = props => {
   );
 
   const handleLeave = async () => {
+    _onEndButtonPress();
     await navigation.goBack();
     await _onConnectButtonPress();
+
   };
   return (
     <View style={styles.container}>
@@ -178,16 +181,14 @@ const VideoCallScreen = props => {
           {status === 'connected' && (
             <View style={styles.remoteGrid}>
               {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
-                console.log("loz cc duma may");
-                console.log("track: ",trackIdentifier);
                 return (
-                  <View  key={trackSid}>
-                  <TwilioVideoParticipantView
-                  style={styles.remoteVideo}
-                    trackIdentifier={{...trackIdentifier,enabled:true}}
-                    enabled={true}
-                    scaleType="fill"
-                  />
+                  <View key={trackSid}>
+                    <TwilioVideoParticipantView
+                      style={styles.remoteVideo}
+                      trackIdentifier={{ ...trackIdentifier, enabled: true }}
+                      enabled={true}
+                      scaleType="fill"
+                    />
                   </View>
                 );
               })}
@@ -202,7 +203,7 @@ const VideoCallScreen = props => {
                 },
               ]}
               onPress={_onMuteButtonPress}>
-              <Text style={{fontSize: 12}}>
+              <Text style={{ fontSize: 12 }}>
                 {isAudioEnabled ? (
                   <FontAwesome5 name="microphone" size={22} color="#fff" />
                 ) : (
@@ -218,7 +219,7 @@ const VideoCallScreen = props => {
               colors={['#DA3344', '#CF1843']}
               style={styles.optionButton}>
               <TouchableOpacity onPress={() => handleLeave()}>
-                <Text style={{fontSize: 12}}>
+                <Text style={{ fontSize: 12 }}>
                   <FontAwesome5 name="phone-slash" size={22} color="#fff" />
                 </Text>
               </TouchableOpacity>
@@ -231,7 +232,7 @@ const VideoCallScreen = props => {
                 },
               ]}
               onPress={_onFlipButtonPress}>
-              <Text style={{fontSize: 12}}>
+              <Text style={{ fontSize: 12 }}>
                 <Ionions
                   name="md-camera-reverse-sharp"
                   size={28}
@@ -256,7 +257,80 @@ const VideoCallScreen = props => {
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  callContainer: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  welcome: {
+    fontSize: 30,
+    textAlign: 'center',
+    paddingTop: 40,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    marginRight: 70,
+    marginLeft: 70,
+    marginTop: 50,
+    textAlign: 'center',
+    backgroundColor: 'white',
+  },
+  button: {
+    marginTop: 100,
+  },
+  localVideo: {
+    flex: 1,
+    width: 150,
+    height: 250,
+    position: 'absolute',
+    right: 5,
+    bottom: 495,
+  },
+  remoteGrid: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    // backgroundColor:"red"
+  },
+  remoteVideo: {
+    marginTop: 1,
+    marginLeft: 1,
+    marginRight: 1,
+    borderRadius: 20,
+    width: windowWidth,
+    height: windowHeight,
+  },
+  optionsContainer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 100,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40,
+  },
+  optionButton: {
+    width: 60,
+    height: 60,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 100 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
 // AppRegistry.registerComponent('Example', () => Example);
 export default VideoCallScreen;
 
