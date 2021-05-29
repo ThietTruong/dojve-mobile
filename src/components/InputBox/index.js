@@ -32,47 +32,15 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
   const onMicrophonePress = () => {
     console.warn('On Microphone');
   };
-  const onSendPress = (type, content, to = idRoom, sender = idUser) => {
-    const sendMessage = {
-      type: 0,
-      content: messageInput,
-      to: idRoom,
-      sender: {
-        name: user.name,
-        _id: user._id,
-        email: user.email,
-      },
-    };
-    // setNewMessage(old => [...old, sendMessage]);
-    newListMessage(messageInput);
-    socket.emit(
-      'messages',
-      {
-        action: 'SEND',
-        message: sendMessage,
-        room: idRoom,
-      },
-      r => {
-        if (r) console.log(r);
-      },
-    );
-    socket.emit(
-      'messages',
-      {
-        action: 'SEND_DONE_TYPING',
-        to: idRoom,
-      },
-      r => {
-        if (r) console.log(r);
-      },
-    );
+  const onSendPress = () => {
+    newListMessage(0, messageInput);
     setMessageInput('');
   };
   const onPress = () => {
     if (!message) {
       onMicrophonePress();
     } else {
-      onSendPress();
+      onSendPress(0, messageInput, idRoom);
     }
   };
 
@@ -160,19 +128,19 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                   {tabSelected === 1 && (
                      <View style={{height: '50%',
                        marginTop: 'auto'}}>
-          <Gif sendAMessage={onSendPress}/>
+          <Gif sendAMessage={newListMessage}/>
         </View>
                 )}
                 {tabSelected === 2 && (
                      <View style={{height: '50%',
                       marginTop: 'auto'}}>
-                      <Sticker sendAMessage = {onSendPress}/>
+                      <Sticker sendAMessage = {newListMessage}/>
                   </View>               
                 )}
                 {tabSelected === 3 && (
                      <View style={{height: '50%',
                       marginTop: 'auto'}}>
-                      <ImageAndVideo sendAMessage = {onSendPress}/>
+                      <ImageAndVideo sendAMessage = {newListMessage}/>
                   </View>               
                 )}
                 <Pressable
