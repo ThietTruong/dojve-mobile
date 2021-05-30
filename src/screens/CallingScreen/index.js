@@ -1,9 +1,37 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Animatable from 'react-native-animatable';
-const CallingScreen = () => {
+import axios from '../../utility/axios';
+const CallingScreen = ({ route, navigation }) => {
+  const { caller, user, token, video, roomid } = route.params;
+  console.log("caller", caller);
+  const socket = useSelector(state => state.socket.current);
+
+  useEffect(() => {
+    socket.on('videocall', data => {
+      if (data.action == 'RECEIVE') {
+        // setCalling({
+        //   status: true,
+        //   id: data.roomId,
+        //   sid: data.sid,
+        //   caller: data.caller,
+        //   video: data.video,
+        // });
+        axios
+          .get(`/call/joinRoom?sid=${data.sid}`)
+          .then(res => {
+            const { data } = res;
+            if (data)
+              console.log("data o day neeeee", data)
+          })
+          .catch(err => console.log('reject', err.msg));
+      }
+    });
+  }, [socket])
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -15,40 +43,41 @@ const CallingScreen = () => {
           style={styles.wrapDes}>
           <Image style={styles.avatar} />
           <View style={styles.des}>
-            <Text style={styles.username}>User Name</Text>
+            <Text style={styles.username}>{caller && caller.name}</Text>
             <Text style={styles.desCall}>Incoming Call</Text>
           </View>
         </Animatable.View>
       </LinearGradient>
       <View style={styles.action}>
-        <Animatable.View
-          animation="bounce"
-          iterationCount="infinite"
+        <View
           style={styles.buttonAction}>
           <LinearGradient
             colors={['#DA3344', '#CF1843']}
             style={styles.optionButton}>
-            <TouchableOpacity>
-              <Text style={{fontSize: 12}}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text style={{ fontSize: 12 }}>
                 <FontAwesome5 name="phone-slash" size={22} color="#fff" />
               </Text>
             </TouchableOpacity>
           </LinearGradient>
-        </Animatable.View>
-        <Animatable.View
-          animation="bounce"
-          iterationCount="infinite"
+        </View>
+        <View
           style={styles.buttonAction}>
           <LinearGradient
             colors={['#36D5A5', '#22BE77']}
             style={styles.optionButton}>
-            <TouchableOpacity>
-              <Text style={{fontSize: 12}}>
+            <TouchableOpacity onPress={() => navigation.navigate('VideoCallScreen', {
+              user,
+              token,
+              video,
+              roomid,
+            })}>
+              <Text style={{ fontSize: 12 }}>
                 <FontAwesome5 name="phone-alt" size={22} color="#fff" />
               </Text>
             </TouchableOpacity>
           </LinearGradient>
-        </Animatable.View>
+        </View>
       </View>
     </View>
   );
