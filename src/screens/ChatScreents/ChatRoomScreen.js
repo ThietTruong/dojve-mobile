@@ -10,6 +10,7 @@ const ChatRoomScreen = ({route, navigation}) => {
   const socket = useSelector(state => state.socket.current);
   const {idUser, idRoom} = route.params;
   const [messages, setMessages] = useState([]);
+  const [val, setVal] = useState([]);
   const [typing, setTyping] = useState(false);
   useEffect(() => {
     axios.get(`/message/getMessageRoom/${idRoom}`).then(res => {
@@ -42,22 +43,42 @@ const ChatRoomScreen = ({route, navigation}) => {
       }
     });
   }, [socket, idUser]);
-  const newListMessage = val => {
-    if (val !== '') {
-      const sendMessage = {
-        type: 0,
-        content: val,
-        to: idRoom,
-        sender: {
-          name: user.name,
-          _id: user._id,
-          email: user.email,
-        },
-      };
-      console.log('hihi', sendMessage);
-      setMessages(old => [sendMessage, ...old]);
-    }
-  };
+  const newListMessage = (type, content) => {
+    const sendMessage = {
+      type: type,
+      content: content,
+      to: idRoom,
+      sender: {
+        name: user.name,
+        _id: user._id,
+        email: user.email,
+      },
+    };
+  // setNewMessage(old => [...old, sendMessage]);
+  socket.emit(
+    'messages',
+    {
+      action: 'SEND',
+      message: sendMessage,
+      room: idRoom,
+    },
+    r => {
+      if (r) console.log(r);
+    },
+  );
+  socket.emit(
+    'messages',
+    {
+      action: 'SEND_DONE_TYPING',
+      to: idRoom,
+    },
+    r => {
+      if (r) console.log(r);
+    },
+  );
+  console.log('hihi', sendMessage);
+  setMessages(old => [sendMessage, ...old]);
+}
   return (
     <ImageBackground
       style={{
