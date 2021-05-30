@@ -30,7 +30,7 @@ function ImageAndVideo ({sendAMessage}) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else {
         console.log('response',response);
-        // handleUpload(response.assets[0],sending1);
+        handleUpload(response.assets[0],sending1);
       }
     });
   }
@@ -50,9 +50,8 @@ function ImageAndVideo ({sendAMessage}) {
       } else {
         // const source = { uri: response.uri };
         console.log('response: ',response)
-        // if(response?.assets[0])
-        //  handleUpload(response.assets[0],sending2);
-        
+        if(response?.assets[0])
+          handleUpload(response.assets[0],sending2); 
       }
       });
   }
@@ -102,7 +101,7 @@ function ImageAndVideo ({sendAMessage}) {
           callback(data.image_url)
         }
         else throw new Error(data.message)
-        alert("Upload success!");
+        console.log("Upload success!");
       })
       .catch(error => {
         alert(error.msg);
