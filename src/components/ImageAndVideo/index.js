@@ -113,10 +113,10 @@ function ImageAndVideo ({sendAMessage}) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' ,backgroundColor: 'white' }}>
     <View style={{ flexDirection:"row", alignItems: "space-between", marginBottom: 20, marginTop: '35%' }}>
     <View style={{ marginHorizontal: 20, marginLeft: 10, marginTop: 5 }}>
-      <Button title="Choose Photo" onPress={handleChoosePhoto} style={{ marginHorizontal: 20, marginLeft: 45, marginTop: 5 }}/>
+      <Button title="Choose Photo" onPress={handleChoosePhoto} color ='#00ad9b' style={{ marginHorizontal: 20, marginLeft: 45, marginTop: 5}}/>
     </View>
     <View style={{ marginHorizontal: 20, marginTop: 5 }}>
-      <Button title="Choose Video" onPress={handleChooseVideo} style={{ marginHorizontal: 20, marginTop: 5 }} />
+      <Button title="Choose Video" onPress={handleChooseVideo} color ='#00ad9b' style={{ marginHorizontal: 20, marginTop: 5}}/>
     </View>
     </View>
   </View>

@@ -106,7 +106,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                     state={tabSelected === 1}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="gif" size={24} color="gray" borderColor="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="gif" size={40} color="#00ad9b" borderColor="gray"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>
@@ -114,7 +114,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                     state={tabSelected === 2}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="sticker" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="sticker" size={40} color="#00ad9b"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   <View style={{height: '23%',
                       marginTop: 'auto'}}>
@@ -122,7 +122,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                     state={tabSelected === 3}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="image" size={24} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="image" size={40} color="#00ad9b"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   </View>
                   {tabSelected === 1 && (
@@ -138,15 +138,17 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                   </View>               
                 )}
                 {tabSelected === 3 && (
-                     <View style={{height: '50%',
+                     <View style={{height: '48%',
                       marginTop: 'auto'}}>
                       <ImageAndVideo sendAMessage = {newListMessage}/>
                   </View>               
                 )}
                 <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-              />
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style = {{alignSelf: 'center'}}>Back</Text>
+                </Pressable>
           </Modal>
           </View>
     </View>

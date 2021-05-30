@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    height: '50%',
+    height: '45%',
     alignItems: "flex-end",
     shadowColor: "#000",
     shadowOffset: {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   tabs: {
-    height : '55%',
+    height : '50%',
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -71,13 +71,14 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
+    backgroundColor: "#F194FF"
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#00ad9b",
   },
   textStyle: {
     color: "white",
