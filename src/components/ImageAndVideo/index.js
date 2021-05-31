@@ -4,11 +4,11 @@ import * as ImagePicker from "react-native-image-picker"
 import axios from "../../utility/axios";
 import Video from 'react-native-video';
 import { combineReducers } from 'redux';
+import ImagePicker1 from 'react-native-image-crop-picker';
 
 var { width, height } = Dimensions.get("window");
 
 function ImageAndVideo ({sendAMessage}) {
-  const [media, setMedia] = React.useState(null);
   const sending2 = (url) => {
     sendAMessage(2, url);
   };
@@ -36,21 +36,36 @@ function ImageAndVideo ({sendAMessage}) {
   }
   
   const handleChooseVideo = () => {
-    const options2 = {
-      title: 'Video Picker', 
-      mediaType: 'video', 
+    const options = {
+      title: 'Select Video',
+      mediaType: 'video',
+      quality: 1
     };
 
-    ImagePicker.launchImageLibrary(options2, response => {
+    ImagePicker.launchImageLibrary(options, response => {
       console.log("hh", response);
       if (response.didCancel) {
         console.log('User cancelled video picker');
       } else if (response.errorCode) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else {
-        console.log('response: ',response)
         if(response?.assets[0])
-          handleUpload(response.assets[0],sending2); 
+          handleUploadVideo(response.assets[0],sending2); 
+      }
+      });
+  }
+
+  const handleChooseVideo1 = () => {
+    ImagePicker1.openPicker({
+      mediaType: "video",
+    }).then((response) => {
+      if (response.didCancel) {
+        console.log('User cancelled video picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        console.log('response choose video: ',response)
+        handleUploadVideo(response,sending2); 
       }
       });
   }
@@ -60,6 +75,17 @@ function ImageAndVideo ({sendAMessage}) {
       uri : response.uri,
       type: response.type,
       name: response.fileName
+    });
+    return data;
+  };
+
+  const createFormDataVideo = (response) => {
+    const data = new FormData();
+    const name = response.path.substring(response.path.lastIndexOf('/') + 1)
+    data.append('image', {
+      uri : response.path,
+      type: response.mime,
+      name
     });
     return data;
   };
@@ -75,11 +101,36 @@ function ImageAndVideo ({sendAMessage}) {
       }}
     ) 
       .then(({data}) => {
+        console.log("data: ",data);
         console.log("upload succes", response);
         if(!data.error && data.error !==undefined){
           callback(data.image_url)
         }
         else throw new Error(data.message)
+      })
+      .catch(error => {
+        alert(error.msg);
+      });
+  };
+
+  const handleUploadVideo = (response,callback) => {
+    const data = createFormDataVideo(response);
+
+    axios.post(`/message/upImage`, 
+     data,
+     { headers: {
+        "Content-Type": "multipart/form-data;charset=utf-8",
+        "Accept": "application/json"
+      }
+    }
+    ) 
+      .then((res) => {
+        const _data = res.data;
+        console.log("upload succes", _data);
+        if(!_data.error && _data.error !== undefined){
+          callback(_data.image_url)
+        }
+        else throw new Error(_data.message)
         console.log("Upload success!");
       })
       .catch(error => {
@@ -95,7 +146,7 @@ function ImageAndVideo ({sendAMessage}) {
       <Button title="Choose Photo" onPress={handleChoosePhoto} color ='#00ad9b' style={{ marginHorizontal: 20, marginLeft: 45, marginTop: 5}}/>
     </View>
     <View style={{ marginHorizontal: 20, marginTop: 5 }}>
-      <Button title="Choose Video" onPress={handleChooseVideo} color ='#00ad9b' style={{ marginHorizontal: 20, marginTop: 5}}/>
+      <Button title="Choose Video" onPress={handleChooseVideo1} color ='#00ad9b' style={{ marginHorizontal: 20, marginTop: 5}}/>
     </View>
     </View>
   </View>

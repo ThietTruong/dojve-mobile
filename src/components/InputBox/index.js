@@ -100,29 +100,29 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
         style={styles.containerStyle}
         >
                 <View style={styles.tabs}>
-                  <View style={{height: '23%',
-                      marginTop: 'auto'}}>
+                  <View style={{height: '22%',
+                      marginTop: 'auto', backgroundColor: "white", borderRadius: 0.3}}>
                    <TouchableOpacity onPress={() => onTabClick(1)}
                     state={tabSelected === 1}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="gif" size={40} color="#00ad9b" borderColor="gray"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="gif" size={35} color="#00ad9b" borderColor="gray" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
-                  <View style={{height: '23%',
-                      marginTop: 'auto'}}>
+                  <View style={{height: '22%',
+                      marginTop: 'auto' , backgroundColor: "white"}}>
                   <TouchableOpacity onPress={() => onTabClick(2)}
                     state={tabSelected === 2}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="sticker" size={40} color="#00ad9b"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="sticker" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
-                  <View style={{height: '23%',
-                      marginTop: 'auto'}}>
+                  <View style={{height: '22%',
+                      marginTop: 'auto', backgroundColor: "white"}}>
                   <TouchableOpacity onPress={() => onTabClick(3)}
                     state={tabSelected === 3}
                     style={styles.tabTextStyle}
                    >
-                  <MaterialCommunityIcons name="image" size={40} color="#00ad9b"></MaterialCommunityIcons></TouchableOpacity>
+                  <MaterialCommunityIcons name="image" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
                   </View>
                   {tabSelected === 1 && (
@@ -147,7 +147,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => setModalVisible(!modalVisible)}
                 >
-                  <Text style = {{alignSelf: 'center'}}>Back</Text>
+                  <Text style = {{alignSelf: 'center', fontWeight: 'bold', color: 'white'}}>Back</Text>
                 </Pressable>
           </Modal>
           </View>

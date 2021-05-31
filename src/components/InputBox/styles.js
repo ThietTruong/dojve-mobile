@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   tabs: {
     height : '50%',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   tabTextStyle: {
     color: Colors.Grey,
