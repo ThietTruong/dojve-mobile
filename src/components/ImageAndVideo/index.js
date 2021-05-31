@@ -48,28 +48,12 @@ function ImageAndVideo ({sendAMessage}) {
       } else if (response.errorCode) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else {
-        // const source = { uri: response.uri };
         console.log('response: ',response)
         if(response?.assets[0])
           handleUpload(response.assets[0],sending2); 
       }
       });
   }
-
-  // const handleChoosePhoto = () => {
-  //     ImagePicker.launchImageLibrary({}, (response) => {
-  //       console.log('Respose =', response);
-  //       setMedia(response.uri);
-  //       if (response.didCancel) {
-  //         alert('Cancelled');
-  //       } else if (response.error) {
-  //         alert('Error: ', error);
-  //       } else {
-  //         const source = {uri:response.uri};
-  //       }
-  //     });
-  //   }
-
   const createFormData = (response) => {
     const data = new FormData();
     data.append('image', {
@@ -83,11 +67,6 @@ function ImageAndVideo ({sendAMessage}) {
   const handleUpload = (response,callback) => {
     const data = createFormData(response);
     console.log("data:",data);
-    // fetch(`${'http://192.168.1.2:5000'}/message/upImage`,{
-    //   method: 'POST',
-    //   body: data,
-    //  {}
-    // }).then(res=>res.json).then(data=>console.log(data));
     axios.post(`/message/upImage`, 
      data,
      { headers: {
