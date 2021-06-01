@@ -12,8 +12,10 @@ import { Portal, Provider } from 'react-native-paper';
 import Gif from '../Sticker/Gif';
 import Sticker from '../Sticker/Sticker';
 import ImageAndVideo from '../ImageAndVideo/index';
+import axios from "../../utility/axios";
 import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import * as ImagePicker from "react-native-image-picker"
 import Entypo from 'react-native-vector-icons/Entypo';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -49,6 +51,7 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
   }
   const [modalVisible, setModalVisible] = useState(false);
 
+
   const onTextChange = val => {
     setMessageInput(val);
     if (!message.length > 1) {
@@ -78,10 +81,6 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
           value={messageInput}
           onChangeText={onTextChange}
         />
-        <Entypo name="attachment" size={24} color="grey" style={styles.icon} />
-        {!messageInput && (
-          <Fontisto name="camera" size={24} color="grey" style={styles.icon} />
-        )}
       </View>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.buttonContainer}>

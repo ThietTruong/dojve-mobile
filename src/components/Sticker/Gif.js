@@ -13,7 +13,6 @@ const getTrendingGif = (callback) => {
     .get(`${ENDPOINT}/trending?api_key=${apiKey}&limit=30&rating=pg-13`)
     .then((res) => {
       const { data } = res;
-      console.log(res);
       callback(data.data);
     });
 };
@@ -22,7 +21,6 @@ const getSearchGif = (q, callback) => {
     .get(`${ENDPOINT}/search?api_key=${apiKey}&limit=30&rating=pg-13&q=${q}`)
     .then((res) => {
       const { data } = res;
-      console.log(res);
       callback(data.data);
     });
 };
