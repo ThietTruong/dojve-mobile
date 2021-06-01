@@ -99,24 +99,24 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
         style={styles.containerStyle}
         >
                 <View style={styles.tabs}>
-                  <View style={{height: '22%',
-                      marginTop: 'auto', backgroundColor: "white", borderRadius: 0.3}}>
+                  <View style={{height: '20%',
+                      marginTop: 'auto', backgroundColor: "white", borderRadius: 5}}>
                    <TouchableOpacity onPress={() => onTabClick(1)}
                     state={tabSelected === 1}
                     style={styles.tabTextStyle}
                    >
                   <MaterialCommunityIcons name="gif" size={35} color="#00ad9b" borderColor="gray" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
-                  <View style={{height: '22%',
-                      marginTop: 'auto' , backgroundColor: "white"}}>
+                  <View style={{height: '20%',
+                      marginTop: 'auto' , backgroundColor: "white", borderRadius: 5}}>
                   <TouchableOpacity onPress={() => onTabClick(2)}
                     state={tabSelected === 2}
                     style={styles.tabTextStyle}
                    >
                   <MaterialCommunityIcons name="sticker" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
                   </View>
-                  <View style={{height: '22%',
-                      marginTop: 'auto', backgroundColor: "white"}}>
+                  <View style={{height: '20%',
+                      marginTop: 'auto', backgroundColor: "white", borderRadius: 5}}>
                   <TouchableOpacity onPress={() => onTabClick(3)}
                     state={tabSelected === 3}
                     style={styles.tabTextStyle}
@@ -125,13 +125,13 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
                   </View>
                   </View>
                   {tabSelected === 1 && (
-                     <View style={{height: '50%',
+                     <View style={{height: '49%',
                        marginTop: 'auto'}}>
           <Gif sendAMessage={newListMessage}/>
         </View>
                 )}
                 {tabSelected === 2 && (
-                     <View style={{height: '50%',
+                     <View style={{height: '49%',
                       marginTop: 'auto'}}>
                       <Sticker sendAMessage = {newListMessage}/>
                   </View>               
