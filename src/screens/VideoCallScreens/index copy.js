@@ -30,7 +30,6 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const VideoCallScreen = props => {
 
-
   const { navigation, route } = props;
   const { token, user, roomId } = route.params;
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
@@ -49,11 +48,13 @@ const VideoCallScreen = props => {
     }
     twilioVideo.current.connect({
       accessToken: token,
+      enableVideo: true,
       enableNetworkQualityReporting: true,
       roomName: roomId
     });
     setStatus('connecting');
   };
+
 
   const _onEndButtonPress = () => {
     twilioVideo.current.disconnect();
@@ -69,7 +70,8 @@ const VideoCallScreen = props => {
     twilioVideo.current.flipCamera();
   };
 
-  const _onRoomDidConnect = () => {
+  const _onRoomDidConnect = ({ roomSid }) => {
+    // setSid(roomSid);
     setStatus('connected');
   };
 
@@ -86,8 +88,8 @@ const VideoCallScreen = props => {
   };
 
   const _onParticipantAddedVideoTrack = ({ participant, track }) => {
-    console.log('onParticipantAddedVideoTrack: ', participant, track);
     setParticipants([...participants, participant]);
+    console.log('onParticipantAddedVideoTrack: ', participant, track);
     setVideoTracks(
       new Map([
         ...videoTracks,
@@ -101,9 +103,11 @@ const VideoCallScreen = props => {
 
   const _onParticipantRemovedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantRemovedVideoTrack: ', participant, track);
-    const videoTracks = new Map(videoTracks);
-    videoTracks.delete(track.trackSid);
-    setVideoTracks(videoTracks);
+    let newParticipant = participants.filter(item => item.sid !== participant.sid);
+    setParticipants(newParticipant);
+    const _videoTracks = new Map(videoTracks);
+    _videoTracks.delete(track.trackSid);
+    setVideoTracks(_videoTracks);
   };
 
   const _onNetworkLevelChanged = ({ participant, isLocalUser, quality }) => {
@@ -156,10 +160,8 @@ const VideoCallScreen = props => {
   );
 
   const handleLeave = async () => {
-    _onEndButtonPress();
     await navigation.goBack();
     await _onConnectButtonPress();
-
   };
   const handleIsVideoEnabled = async () => {
     if (isVideoEnabled) {
@@ -168,32 +170,20 @@ const VideoCallScreen = props => {
       setIsVideoEnabled(true);
     }
   }
+  const handleInviteGroup = () => {
+    navigation.navigate("InviteGroup", { sid: sid })
+  }
   return (
     <View style={styles.container}>
-      {/* {status === 'disconnected' && (
-        <View>
-          <Text style={styles.welcome}>React Native Twilio Video</Text>
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            value={token}
-            onChangeText={text => setToken(text)}></TextInput>
-          <Button
-            title="Connect"
-            style={styles.button}
-            onPress={_onConnectButtonPress}></Button>
-        </View>
-      )} */}
-
-      {(status === 'connected' || status === 'connecting') && (
+      {(status === '  ' || status === 'connecting') && (
         <View style={styles.callContainer}>
           {status === 'connected' && (
-            <View style={styles.remoteGrid}>
-              <Swiper style={styles.listTrackVideo} >
+            <View style={styles.remoteGrid} >
+              <Swiper showsButtons={true} style={styles.listTrackVideo} >
                 {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
                   let nameTrackIdentifier = participants.find(item => item.sid === trackIdentifier.participantSid);
                   return (
-                    <View key={trackSid}>
+                    <View key={`${trackSid}`} style={styles.videoStrackSid}>
                       <TwilioVideoParticipantView
                         style={styles.remoteVideo}
                         trackIdentifier={{ ...trackIdentifier, enabled: true }}
@@ -217,7 +207,7 @@ const VideoCallScreen = props => {
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 },
               ]}
-            >
+              onPress={handleIsVideoEnabled}>
               <Text style={{ fontSize: 12 }}>
                 {isVideoEnabled ? (
                   <Feather name="video" size={22} color="#fff" />
@@ -276,7 +266,8 @@ const VideoCallScreen = props => {
                 />
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
+              onPress={handleInviteGroup}
               style={[
                 styles.optionButton,
                 {
@@ -290,12 +281,12 @@ const VideoCallScreen = props => {
                   color="#fff"
                 />
               </Text>
-            </TouchableOpacity>
-            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+            </TouchableOpacity> */}
+            <TwilioVideoLocalView enabled={false} style={styles.localVideo} />
           </View>
         </View>
-      )}
-
+      )
+      }
 
       <TwilioVideo
         ref={twilioVideo}
@@ -306,7 +297,7 @@ const VideoCallScreen = props => {
         onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}
         onNetworkQualityLevelsChanged={_onNetworkLevelChanged}
       />
-    </View>
+    </View >
   );
 };
 const styles = StyleSheet.create({
@@ -345,7 +336,7 @@ const styles = StyleSheet.create({
     height: 250,
     position: 'absolute',
     right: 0,
-    bottom: windowHeight - 285,
+    bottom: 495,
     display: 'none'
   },
   remoteGrid: {
@@ -406,3 +397,5 @@ const styles = StyleSheet.create({
 })
 // AppRegistry.registerComponent('Example', () => Example);
 export default VideoCallScreen;
+
+

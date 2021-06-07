@@ -13,6 +13,7 @@ import UserDetail from '../screens/UserDetail';
 import VideoCallScreen from '../screens/VideoCallScreens';
 import axios from '../utility/axios';
 import CallingScreen from '../screens/CallingScreen';
+import InviteGroup from '../screens/InviteGroup';
 // import {setPartner} from '../feature/partner';
 const Stack = createStackNavigator();
 export default function Chat({ navigation, route }) {
@@ -183,7 +184,6 @@ export default function Chat({ navigation, route }) {
         name="ChatRoom"
         component={ChatRoomScreen}
         options={({ route }) => (
-          console.log('route', route.params),
           setPartner(route.params.partner),
           {
             title: route.params.userName,
@@ -222,18 +222,24 @@ export default function Chat({ navigation, route }) {
       <Stack.Screen
         name="VideoCallScreen"
         component={VideoCallScreen}
-        title="Video call"
-        options={({ route }) => (
+        options={{ headerShown: false }}
+      // title="Video call"
+      // options={({ route }) => (
 
-          {
-            title: route.params.user.name ? route.params.user.name : partner.name,
-          }
-        )}
+      //   {
+      //     title: route.params.user.name ? route.params.user.name : partner.name,
+      //   }
+      // )}
       />
       <Stack.Screen
         name="CallingScreen"
         component={CallingScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="InviteGroup"
+        component={InviteGroup}
+        title="Invite Group"
       />
       {/* <Stack.Screen
         name="ChatRoom"
