@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from '../../utility/axios';
-
+import InviteItem from '../../components/InviteItem';
 function InviteGroup({ route, navigation }) {
   const { sid } = route.params;
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(false);
   const socket = useSelector((state) => state.socket.current);
   const user = useSelector((state) => state.user.current);
+
 
   useEffect(() => {
     setLoading(true);
@@ -58,17 +58,11 @@ function InviteGroup({ route, navigation }) {
   };
   return (
     <View style={styles.inviteGroup}>
-      <View style={styles.titleInviteGroup}>
-        <View style={styles.nameInviteGroup}>
-          <Text>InviteGroup</Text>
-        </View>
-        <View>
-          <AntDesign name='closecircleo' size={22} color='#fff' />
-        </View>
-      </View>
-      <View style={styles.listInvite}>
-        <FlatList />
-      </View>
+      <FlatList
+        data={friends}
+        keyExtractor={friend => friend.id}
+        renderItem={({ item }) => <InviteItem friend={item} handleInvite={handleInvite} />}
+      />
     </View>
   )
 }
@@ -78,5 +72,6 @@ export default InviteGroup;
 const styles = StyleSheet.create({
   inviteGroup: {
     flex: 1,
+    paddingHorizontal: 15
   }
 })

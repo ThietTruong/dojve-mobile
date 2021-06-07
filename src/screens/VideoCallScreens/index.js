@@ -8,8 +8,6 @@ import {
   TouchableOpacity,
   Alert,
   Dimensions,
-  Modal,
-  Pressable
 } from 'react-native';
 
 import {
@@ -36,7 +34,7 @@ const VideoCallScreen = props => {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [status, setStatus] = useState('disconnected');
-  // const [sid, setSid] = useState();
+  const [sid, setSid] = useState();
   // const [status, setStatus] = useState('connected');
   const [participants, setParticipants] = useState(new Map());
   const [videoTracks, setVideoTracks] = useState(new Map());
@@ -69,11 +67,13 @@ const VideoCallScreen = props => {
     twilioVideo.current.flipCamera();
   };
 
-  const _onRoomDidConnect = () => {
+  const _onRoomDidConnect = ({ roomSid }) => {
+    setSid(roomSid);
     setStatus('connected');
   };
 
   const _onRoomDidDisconnect = ({ error }) => {
+
     console.log('ERROR: ', error);
 
     setStatus('disconnected');
@@ -101,6 +101,8 @@ const VideoCallScreen = props => {
 
   const _onParticipantRemovedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantRemovedVideoTrack: ', participant, track);
+    let newParticipant = participants.filter(item => item.sid !== participant.sid);
+    setParticipants(newParticipant);
     const videoTracks = new Map(videoTracks);
     videoTracks.delete(track.trackSid);
     setVideoTracks(videoTracks);
@@ -147,7 +149,10 @@ const VideoCallScreen = props => {
           {
             text: 'Leave',
             style: 'destructive',
-            onPress: () => { _onEndButtonPress(), navigation.dispatch(e.data.action) },
+            onPress: async () => {
+              await _onEndButtonPress();
+              await _onConnectButtonPress();
+            },
 
           },
         ]);
@@ -156,17 +161,12 @@ const VideoCallScreen = props => {
   );
 
   const handleLeave = async () => {
-    _onEndButtonPress();
-    await navigation.goBack();
-    await _onConnectButtonPress();
+
+    navigation.popToTop();
 
   };
-  const handleIsVideoEnabled = async () => {
-    if (isVideoEnabled) {
-      setIsVideoEnabled(false);
-    } else {
-      setIsVideoEnabled(true);
-    }
+  const handleIsVideoEnabled = () => {
+    setIsVideoEnabled(!isVideoEnabled)
   }
   return (
     <View style={styles.container}>
@@ -211,6 +211,7 @@ const VideoCallScreen = props => {
           )}
           <View style={styles.optionsContainer}>
             <TouchableOpacity
+              onPress={handleIsVideoEnabled}
               style={[
                 styles.optionButton,
                 {
@@ -277,6 +278,7 @@ const VideoCallScreen = props => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => navigation.navigate("InviteGroup", { sid: sid })}
               style={[
                 styles.optionButton,
                 {
@@ -291,7 +293,7 @@ const VideoCallScreen = props => {
                 />
               </Text>
             </TouchableOpacity>
-            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+            {isVideoEnabled ? <TwilioVideoLocalView enabled={true} style={styles.localVideo} /> : <View></View>}
           </View>
         </View>
       )}
@@ -352,7 +354,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // backgroundColor:"red"
   },
   remoteVideo: {
     width: windowWidth,

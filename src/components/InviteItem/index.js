@@ -1,21 +1,29 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-function InviteItem({ handleInvite, roomId, friends }) {
+function InviteItem({ handleInvite, friend }) {
+  const [invitationSent, setInvitationSent] = useState(false)
+  const wrapHandleInvite = (idRoom) => {
+    handleInvite(idRoom);
+    setInvitationSent(true);
+  }
   return (
     <View style={styles.InviteItem}>
       <View style={styles.inforUser}>
         <Image style={styles.avatar} />
         <View style={styles.desUser}>
-          <Text style={styles.username}>Hehe</Text>
+          <Text style={styles.username} ellipsizeMode='middle' numberOfLines={1} >{friend.name}</Text>
         </View>
         <View style={styles.invites}>
           <TouchableOpacity
+            onPress={() => wrapHandleInvite(friend.roomId)}
             style={[styles.invitesItem, styles.accept]}
           >
-            <AntDesign name="checkcircleo" size={22} color="#fff" />
+            {invitationSent ? <AntDesign name="checkcircleo" size={22} color="#fff" /> : <View></View>}
+
             <Text style={styles.invitesText}>Invite</Text>
           </TouchableOpacity>
         </View>
@@ -49,13 +57,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#01ad9b',
   },
   desUser: {
-    // justifyContent: 'space-around',
     alignItems: 'center',
     flex: 1,
   },
   username: {
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 16,
+    overflow: "hidden",
+    textTransform: 'capitalize'
   },
 
   invites: {
@@ -79,8 +88,7 @@ const styles = StyleSheet.create({
   },
   accept: {
     backgroundColor: '#08d4c4',
-    marginRight: 10,
-    width: 130,
+    width: 100,
     paddingVertical: 10,
   },
   reject: {
