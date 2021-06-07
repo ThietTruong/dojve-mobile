@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import InviteFriends from '../screens/InviteFriends';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainTabNavigator from './MainTabNavigator';
@@ -155,9 +156,9 @@ export default function Chat({ navigation, route }) {
                 justifyContent: 'space-between',
                 marginRight: 5,
               }}>
-              <MaterialCommunityIcons
-                name="dots-vertical-circle-outline"
-                size={26}
+              <AntDesign
+                name="user"
+                size={32}
                 color="white"
               />
             </TouchableOpacity>
