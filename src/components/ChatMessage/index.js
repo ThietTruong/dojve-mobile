@@ -75,9 +75,9 @@ function ChatMessage(props) {
           <Text style={style.message}>{message.content}</Text>
           <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ): ( message.type === 1 ? (
-          <View style={style.imgContainer}>
-          <Image style={style.image} source = {{uri: message.content}}/>
+        ): ( message.type === 3 ? (
+          <View style={style.stickerContainer}>
+          <Image style={style.sticker} source = {{uri: message.content}}/>
           <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
         ) : (message.type === 2 ? (
@@ -109,7 +109,17 @@ function ChatMessage(props) {
             />
           <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ) : null))
+        ): (message.type === 4 ? (
+          <View style={style.gifContainer}>
+          <Image style={style.gif} source = {{uri: message.content}}/>
+          <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
+          </View>
+        ): ( message.type === 1 ? (
+          <View style={style.imgContainer}>
+          <Image style={style.image} source = {{uri: message.content}}/>
+          <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
+          </View>
+        ): null))))
         }
       </View>
     </View>
