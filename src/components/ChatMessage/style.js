@@ -49,6 +49,12 @@ const styles = StyleSheet.create({
     height: 150,
     marginLeft: '65%',
   },
+  groupInvite: {
+    backgroundColor: '#DCF8C5',
+    borderRadius: 5,
+    padding: 10,
+    marginLeft: '30%'
+  },
   gifContainer:{
     width: 160,
     height: 170,

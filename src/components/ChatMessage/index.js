@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import style from './style';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
+import { Button } from 'react-native';
 
 function ChatMessage(props) {
   const {message, idUser} = props;
@@ -13,7 +14,6 @@ function ChatMessage(props) {
   const videoPlayer = useRef(null);
     const [duration, setDuration] = useState(0);
     const [paused, setPaused] = useState(true);
-
     const [currentTime, setCurrentTime] = useState(0);
     const [playerState, setPlayerState] = useState(PLAYER_STATES.PAUSED);
     const [isLoading, setIsLoading] = useState(true);
@@ -119,7 +119,13 @@ function ChatMessage(props) {
           <Image style={style.image} source = {{uri: message.content}}/>
           <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ): null))))
+        ): ( message.type === 5 ? (
+          <View style={style.groupInvite}>
+          <Text style={{fontWeight : 'bold', fontSize: 16.5}}> {message.sender.name} have sent you an invitation</Text>
+          <Button style={{alignItems: 'center', justifyContent: 'space-between'}} color = "#00ad9b" title="Join"/>
+          <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
+          </View>
+        ) : null )))))
         }
       </View>
     </View>
