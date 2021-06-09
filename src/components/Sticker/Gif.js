@@ -1,9 +1,9 @@
-import {Searchbar} from 'react-native-paper';
-import {ScrollView ,TouchableHighlight, TextInput, StyleSheet, KeyboardAvoidingView,View,FlatList,Image, Modal} from 'react-native';
+import { Searchbar } from 'react-native-paper';
+import { ScrollView, TouchableHighlight, TextInput, StyleSheet, KeyboardAvoidingView, View, FlatList, Image, Modal } from 'react-native';
 import axios from "../../utility/axios";
 import { debounce } from "lodash";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {KeyboardAccessoryView} from 'react-native-ui-lib/keyboard';
+import { KeyboardAccessoryView } from 'react-native-ui-lib/keyboard';
 import React, { useRef, useEffect, useState } from "react";
 const apiKey = "7oleYFqKiRberKvCCXQQDw0ki0IcmQfu";
 const ENDPOINT = "https://api.giphy.com/v1/gifs";
@@ -13,7 +13,6 @@ const getTrendingGif = (callback) => {
     .get(`${ENDPOINT}/trending?api_key=${apiKey}&limit=30&rating=pg-13`)
     .then((res) => {
       const { data } = res;
-      console.log(res);
       callback(data.data);
     });
 };
@@ -22,7 +21,6 @@ const getSearchGif = (q, callback) => {
     .get(`${ENDPOINT}/search?api_key=${apiKey}&limit=30&rating=pg-13&q=${q}`)
     .then((res) => {
       const { data } = res;
-      console.log(res);
       callback(data.data);
     });
 };
@@ -38,7 +36,7 @@ function Gif({ sendAMessage }) {
   const debounceFetchGif = useRef(debounce((q) => fetchGifSearch(q), 1000))
     .current;
   const sendAGif = (gif) => {
-    sendAMessage(1, gif);
+    sendAMessage(4, gif);
   };
   const onSearchGif = (e) => {
     const q = e.value;
@@ -52,37 +50,37 @@ function Gif({ sendAMessage }) {
       debounceFetchGif(q);
     }
   };
-return (
+  return (
     <View style={styles.view}>
-    <Searchbar
-          placeholder="Search GIFs"
-          placeholderTextColor='black'
-          style ={styles.input}
-          value={keyword}
-          onChange={onSearchGif}
-        />
+      <Searchbar
+        placeholder="Search GIFs"
+        placeholderTextColor='black'
+        style={styles.input}
+        value={keyword}
+        onChange={onSearchGif}
+      />
       <FlatList
-        style={{margin:4}}
+        style={{ margin: 4 }}
         numColumns={5}
         data={gifs}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <TouchableHighlight onPress={() => sendAGif(item.images.original.url)}>
-          <Image
-             resizeMode='contain'
-             style={styles.image}
-             source={{uri: item.images.original.url}}
-           />
-           </TouchableHighlight>  
-          )
+            <Image
+              resizeMode='contain'
+              style={styles.image}
+              source={{ uri: item.images.original.url }}
+            />
+          </TouchableHighlight>
+        )
         }
       />
     </View>
-    )
+  )
 }
 const styles = StyleSheet.create({
   view: {
-    flex: 1, 
-    margin: 5, 
+    flex: 1,
+    margin: 5,
     backgroundColor: 'white'
   },
   textInput: {

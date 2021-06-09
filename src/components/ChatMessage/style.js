@@ -19,10 +19,16 @@ const styles = StyleSheet.create({
   message: {},
   time: {
     alignSelf: 'flex-end',
-    marginBottom: 10,
+    marginBottom: 5,
     color: '#555555',
   },
   image: {
+    width: 200,
+    height: 200,
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  sticker: {
     width: 130,
     height: 130,
     marginBottom: 5,
@@ -40,7 +46,7 @@ const styles = StyleSheet.create({
   },
   video: {
     width: 200,
-    height: 280,
+    height: 270,
     marginBottom: 5,
     marginTop: 5,
   },
