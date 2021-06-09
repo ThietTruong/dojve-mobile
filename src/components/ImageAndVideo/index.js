@@ -172,7 +172,8 @@ function ImageAndVideo({ sendAMessage }) {
           <Button title="Choose Video" onPress={handleChooseVideo} color='#00ad9b' style={{ marginHorizontal: 20, marginTop: 5 }} />
         </View>
       </View>
-      )
+    </View>
+  )
 }
 
-      export default ImageAndVideo;
+export default ImageAndVideo;
