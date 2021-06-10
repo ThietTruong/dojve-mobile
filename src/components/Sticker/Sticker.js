@@ -33,7 +33,7 @@ export default function Sticker({ sendAMessage }) {
     });
   };
   const sendSticker = (linkSticker) => {
-    sendAMessage(3, linkSticker);
+    sendAMessage(1, linkSticker);
   };
   const fetchStickerSearched = (q) => {
     axios.get(`/sticker/search?q=${q}`).then((res) => {

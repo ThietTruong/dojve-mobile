@@ -10,11 +10,11 @@ var { width, height } = Dimensions.get("window");
 
 function ImageAndVideo ({sendAMessage}) {
   const sending2 = (url) => {
-    sendAMessage(2, url);
+    sendAMessage(4, url);
   };
 
   const sending1 = (url) => {
-    sendAMessage(1, url);
+    sendAMessage(3, url);
   };
   const handleChoosePhoto = () => {
     let option1 = {
@@ -33,7 +33,6 @@ function ImageAndVideo ({sendAMessage}) {
       }
     });
   }
-
   const handleTakeAPhoto = () => {
     let options = {
       title: 'Chose photo',
@@ -52,26 +51,6 @@ function ImageAndVideo ({sendAMessage}) {
     });
   }
   
-  // const handleChooseVideo = () => {
-  //   const options = {
-  //     title: 'Select Video',
-  //     mediaType: 'video',
-  //     quality: 1
-  //   };
-
-  //   ImagePicker.launchImageLibrary(options, response => {
-  //     console.log("hh", response);
-  //     if (response.didCancel) {
-  //       console.log('User cancelled video picker');
-  //     } else if (response.errorCode) {
-  //       console.log('ImagePicker Error: ', response.errorMessage);
-  //     } else {
-  //       if(response?.assets[0])
-  //         handleUploadVideo(response.assets[0],sending2); 
-  //     }
-  //     });
-  // }
-
   const handleChooseVideo = () => {
     ImagePicker1.openPicker({
       mediaType: "video",
@@ -170,6 +149,6 @@ function ImageAndVideo ({sendAMessage}) {
     </View>
     </View>
   </View>
-    )}
+  )}
 
 export default ImageAndVideo;
