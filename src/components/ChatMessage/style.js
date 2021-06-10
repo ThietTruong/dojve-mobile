@@ -42,28 +42,23 @@ const styles = StyleSheet.create({
   imgContainer:{
     width: 200,
     height: 220,
-    marginLeft: '50%',
   },
   stickerContainer:{
     width: 140,
     height: 150,
-    marginLeft: '65%',
   },
   groupInvite: {
     backgroundColor: '#DCF8C5',
     borderRadius: 5,
     padding: 10,
-    marginLeft: '30%'
   },
   gifContainer:{
     width: 160,
     height: 170,
-    marginLeft: '60%',
   },
   videoContainer:{
     width: 200,
     height: 300,
-    marginLeft: '50%',
   },
   video: {
     width: 200,
