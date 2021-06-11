@@ -21,7 +21,6 @@ import Ionions from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import LinearGradient from 'react-native-linear-gradient';
-import Paging from 'react-native-infinite-swiper';
 import Swiper from 'react-native-swiper';
 import axios from '../../utility/axios';
 const windowWidth = Dimensions.get('window').width;
@@ -30,7 +29,7 @@ const VideoCallScreen = props => {
 
 
   const { navigation, route } = props;
-  const { token, user, roomId } = route.params;
+  const { token, user, roomId, video } = route.params;
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [status, setStatus] = useState('disconnected');
@@ -41,16 +40,34 @@ const VideoCallScreen = props => {
   const twilioVideo = useRef(null);
 
   const _onConnectButtonPress = async () => {
-    if (Platform.OS === 'android') {
-      await _requestAudioPermission();
-      await _requestCameraPermission();
+    setIsVideoEnabled(video)
+    if (video) {
+      if (Platform.OS === 'android') {
+        await _requestAudioPermission();
+        await _requestCameraPermission();
+      }
+      twilioVideo.current.connect({
+        accessToken: token,
+        enableNetworkQualityReporting: true,
+        roomName: roomId,
+        enableVideo: video
+      });
+      setStatus('connecting');
+    } else {
+      if (Platform.OS === 'android') {
+        await _requestAudioPermission();
+        
+      }
+      twilioVideo.current.connect({
+        accessToken: token,
+        enableNetworkQualityReporting: true,
+        roomName: roomId,
+        enableVideo: false,
+      });
+      setStatus('connecting');
     }
-    twilioVideo.current.connect({
-      accessToken: token,
-      enableNetworkQualityReporting: true,
-      roomName: roomId
-    });
-    setStatus('connecting');
+
+
   };
 
   const _onEndButtonPress = () => {
@@ -133,36 +150,35 @@ const VideoCallScreen = props => {
       buttonPositive: 'OK',
     });
   };
+
   useEffect(() => {
     _onConnectButtonPress();
   }, []);
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', e => {
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-        const action = e.data.action;
+  // useEffect(
+  //   () =>
+  //     navigation.addListener('beforeRemove', e => {
+  //       // Prevent default behavior of leaving the screen
+  //       e.preventDefault();
+  //       const action = e.data.action;
 
-        // Prompt the user before leaving the screen
-        Alert.alert('Conversation', 'Do you want to leave the conversation?', [
-          { text: 'Stay', style: 'cancel', onPress: () => { } },
-          {
-            text: 'Leave',
-            style: 'destructive',
-            onPress: async () => {
-              await _onEndButtonPress();
-              await _onConnectButtonPress();
-            },
+  //       // Prompt the user before leaving the screen
+  //       Alert.alert('Conversation', 'Do you want to leave the conversation?', [
+  //         { text: 'Stay', style: 'cancel', onPress: () => { } },
+  //         {
+  //           text: 'Leave',
+  //           style: 'destructive',
+  //           onPress: () => handleLeave()
 
-          },
-        ]);
-      }),
-    [navigation],
-  );
+  //         },
+  //       ]);
+  //     }),
+  //   [navigation],
+  // );
 
   const handleLeave = async () => {
-
-    navigation.popToTop();
+    await _onEndButtonPress();
+    // await _onConnectButtonPress();
+    await navigation.popToTop();
 
   };
   const handleIsVideoEnabled = () => {
@@ -211,7 +227,7 @@ const VideoCallScreen = props => {
           )}
           <View style={styles.optionsContainer}>
             <TouchableOpacity
-              onPress={handleIsVideoEnabled}
+              onPress={() => setIsVideoEnabled(!isVideoEnabled)}
               style={[
                 styles.optionButton,
                 {
@@ -255,7 +271,7 @@ const VideoCallScreen = props => {
             <LinearGradient
               colors={['#DA3344', '#CF1843']}
               style={styles.optionButton}>
-              <TouchableOpacity onPress={() => handleLeave()}>
+              <TouchableOpacity onPress={handleLeave}>
                 <Text style={{ fontSize: 12 }}>
                   <FontAwesome5 name="phone-slash" size={22} color="#fff" />
                 </Text>

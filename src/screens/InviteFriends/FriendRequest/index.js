@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 import axios from '../../../utility/axios';
-import {useSelector, useDispatch} from 'react-redux';
-import {addRoom} from '../../../feature/rooms';
-import {deleteRequest, setRequest} from '../../../feature/friendRequest';
+import { useSelector, useDispatch } from 'react-redux';
+import { addRoom } from '../../../feature/rooms';
+import { deleteRequest, setRequest } from '../../../feature/friendRequest';
 import ItemRequest from '../../../components/ItemRequest';
 import Nothing from '../../../utility/NothingScreen';
 const FriendRequest = () => {
@@ -16,7 +16,7 @@ const FriendRequest = () => {
     axios
       .get('/user/getListFriendRequest')
       .then(res => {
-        const {data} = res;
+        const { data } = res;
         if (!data.error) {
           dispatch(setRequest(data.requests));
         }
@@ -45,13 +45,15 @@ const FriendRequest = () => {
       {invites.length == 0 ? (
         <Nothing />
       ) : (
-        <FlatList
-          data={invites}
-          renderItem={request => (
-            <ItemRequest inforRequest={request} acceptRequest={acceptRequest} />
-          )}
-          keyExtractor={item => item._id}
-        />
+        <View style={styles.listFriendRequest}>
+          <FlatList
+            data={invites}
+            renderItem={request => (
+              <ItemRequest inforRequest={request} acceptRequest={acceptRequest} />
+            )}
+            keyExtractor={item => item._id}
+          />
+        </View>
       )}
     </View>
   );
@@ -60,6 +62,8 @@ export default FriendRequest;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
   },
+  listFriendRequest: {
+    paddingHorizontal: 20,
+  }
 });

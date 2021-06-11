@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Alert, TouchableOpacity } from 'react-native';
+import { Text, View, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
 import InviteFriends from '../screens/InviteFriends';
@@ -18,6 +18,8 @@ import InviteGroup from '../screens/InviteGroup';
 // import {setPartner} from '../feature/partner';
 const Stack = createStackNavigator();
 export default function Chat({ navigation, route }) {
+  const [isVideoCalling, setIsVideoCalling] = useState(false);
+  const [isCalling, setIsCalling] = useState(false);
   const socket = useSelector(state => state.socket.current);
   const [calling, setCalling] = useState({
     status: false,
@@ -98,6 +100,7 @@ export default function Chat({ navigation, route }) {
     navigation.navigate('UserDetail', { userName: user.name });
   };
   const handleOnpressVideoCall = roomid => {
+    setIsVideoCalling(true)
     axios
       .get(`/call/getToken?roomid=${roomid}`)
       .then(res => {
@@ -123,10 +126,44 @@ export default function Chat({ navigation, route }) {
             video: true,
             roomid: roomid,
           });
+          setIsVideoCalling(false)
         }
       })
       .catch(err => console.log(err));
   };
+  const handleOnpressCall = roomid => {
+    setIsCalling(true);
+    axios
+      .get(`/call/getToken?roomid=${roomid}`)
+      .then(res => {
+        const { data } = res;
+        if (!data.error && data.error !== undefined) {
+          socket.emit(
+            'videocall',
+            {
+              action: 'startCall',
+              aToken: data.token,
+              roomId: roomid,
+              sid: data.roomSID,
+              video: true,
+            },
+            (error, msg) => {
+              if (error) console.log(error);
+              console.log(msg);
+            },
+          );
+          navigation.navigate('VideoCallScreen', {
+            user: user,
+            token: data.token,
+            video: false,
+            roomid: roomid,
+          });
+          setIsCalling(false);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
 
   return (
     <Stack.Navigator
@@ -198,10 +235,12 @@ export default function Chat({ navigation, route }) {
                 }}>
                 <TouchableOpacity
                   onPress={() => handleOnpressVideoCall(route.params.idRoom)}>
-                  <FontAwesome5 name="video" size={22} color={'white'} />
+                  {isVideoCalling ? <ActivityIndicator size={22} color="#fff" /> : <FontAwesome5 name="video" size={22} color={'white'} />}
                 </TouchableOpacity>
-                <TouchableOpacity>
-                  <MaterialIcons name="call" size={22} color={'white'} />
+                <TouchableOpacity
+                  onPress={() => handleOnpressCall(route.params.idRoom)}
+                >
+                  {isCalling ? <ActivityIndicator size={22} color="#fff" /> : <MaterialIcons name="call" size={22} color={'white'} />}
                 </TouchableOpacity>
                 <TouchableOpacity>
                   <MaterialCommunityIcons
@@ -242,30 +281,6 @@ export default function Chat({ navigation, route }) {
         component={InviteGroup}
         title="Invite Group"
       />
-      {/* <Stack.Screen
-        name="ChatRoom"
-        component={ChatRoomScreen}
-        options={({route}) => ({
-          title: route.params.name,
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: 'row',
-                width: 100,
-                justifyContent: 'space-between',
-                marginRight: 10,
-              }}>
-              <FontAwesome5 name="video" size={22} color={"white"} />
-              <MaterialIcons name="call" size={22} color={"white"} />
-              <MaterialCommunityIcons
-                name="dots-vertical"
-                size={22}
-                color={"white"}
-              />
-            </View>
-          ),
-        })}
-      /> */}
     </Stack.Navigator>
   );
 }

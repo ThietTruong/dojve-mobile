@@ -5754,10 +5754,10 @@ react-native-image-crop-picker@^0.36.2:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.36.2.tgz#fcb35c1a12d805bedbb6d94a87078e86a6c9b49f"
   integrity sha512-cTauoEHHzx14ZHA7Pt65e7RVnbn1WRYQz2ufTZp9/05EtNDrdsXwNhgtXdWVFbOhYB8qgUFQjy2NelkBOHIH3g==
 
-react-native-image-picker@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.0.0.tgz#a0779dc78135ad27488e0cc7f8c9e66ed79a7876"
-  integrity sha512-dBm83p+Gw3XhVXT6Eg2KUdq0t13vdHeuRdp/KcaAVur6Z/W1sOacg8HOdCMxmtTDV6FTde2g+697zI1g0akOtA==
+react-native-image-picker@^4.0.2:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.0.3.tgz#dd8d393e0c57321688885c74b52244ad36e532d6"
+  integrity sha512-S4a1jE4fAPDzmah/7OVTEAXGz1/wlGyClU+spygmek5rVLERR5BgwnkX3tLP/UvMQbfdPZNUbnH0hEe7su2AZg==
 
 react-native-infinite-swiper@^1.0.1:
   version "1.0.1"
