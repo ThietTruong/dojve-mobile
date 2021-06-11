@@ -56,7 +56,7 @@ const VideoCallScreen = props => {
     } else {
       if (Platform.OS === 'android') {
         await _requestAudioPermission();
-        
+
       }
       twilioVideo.current.connect({
         accessToken: token,

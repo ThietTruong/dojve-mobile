@@ -36,7 +36,7 @@ function Gif({ sendAMessage }) {
   const debounceFetchGif = useRef(debounce((q) => fetchGifSearch(q), 1000))
     .current;
   const sendAGif = (gif) => {
-    sendAMessage(4, gif);
+    sendAMessage(2, gif);
   };
   const onSearchGif = (e) => {
     const q = e.value;

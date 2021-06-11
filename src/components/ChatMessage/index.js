@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import style from './style';
 import Video from 'react-native-video';
@@ -41,12 +41,18 @@ function ChatMessage(props) {
     }
   };
 
+  const onLoadEnd = () => {
+    setIsLoading(false);
+  }
+
   const onProgress = (data) => {
     if (!isLoading) {
       setCurrentTime(data.currentTime);
     }
   };
-
+  const onLoadImg = () => {
+    setIsLoading(false);
+  }
   const onLoad = (data) => {
     setDuration(Math.round(data.duration));
     setIsLoading(false);
@@ -74,13 +80,19 @@ function ChatMessage(props) {
             <Text style={style.message}>{message.content}</Text>
             <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ) : (message.type === 3 ? (
-          <View style={style.stickerContainer}>
+        ) : (message.type === 1 ? (
+          <View style={style.stickerContainer, {
+            marginLeft: isMessage ? "65%" : 0,
+            marginRight: isMessage ? 0 : "65%"
+          }}>
             <Image style={style.sticker} source={{ uri: message.content }} />
             <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ) : (message.type === 2 ? (
-          <View style={style.videoContainer}>
+        ) : (message.type === 4 ? (
+          <View style={style.videoContainer, {
+            marginLeft: isMessage ? "50%" : 0,
+            marginRight: isMessage ? 0 : "50%"
+          }}>
             <Video
               style={style.video}
               source={{ uri: message.content }}
@@ -108,18 +120,39 @@ function ChatMessage(props) {
             />
             <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ) : (message.type === 4 ? (
-          <View style={style.gifContainer}>
+        ) : (message.type === 2 ? (
+          <View style={style.gifContainer, {
+            marginLeft: isMessage ? "62%" : 0,
+            marginRight: isMessage ? 0 : "62%"
+          }}>
             <Image style={style.gif} source={{ uri: message.content }} />
             <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
-        ) : (message.type === 1 ? (
-          <View style={style.imgContainer}>
-            <Image style={style.image} source={{ uri: message.content }} />
+        ) : (message.type === 3 ? (
+          <View style={style.imgContainer, {
+            marginLeft: isMessage ? "50%" : 0,
+            marginRight: isMessage ? 0 : "50%"
+          }}>
+            <Image style={style.image} onLoadEnd={onLoadEnd} onLoad={onLoadImg} onLoadStart={onLoadStart} source={{ uri: message.content }} />
+            <ActivityIndicator
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }} size="large" color="#0000ff"
+              animating={isLoading}
+            />
             <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
           </View>
         ) : (message.type === 5 ? (
-          <View style={style.groupInvite}>
+          <View style={style.groupInvite, {
+            marginLeft: isMessage ? 50 : 0,
+            marginRight: isMessage ? 0 : 50
+          }}>
             <Text style={{ fontWeight: 'bold', fontSize: 16.5 }}> {message.sender.name} have sent you an invitation</Text>
             <Button style={{ alignItems: 'center', justifyContent: 'space-between' }} color="#00ad9b" title="Join" />
             <Text style={style.time}>{moment(message.createdAt).fromNow()}</Text>
