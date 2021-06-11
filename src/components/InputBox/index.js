@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -20,9 +20,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {TextInput} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
-const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
+import { TextInput } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
+const InputBox = ({ idUser, idRoom, message, newListMessage, user }) => {
   const socket = useSelector(state => state.socket.current);
   const [newMessage, setNewMessage] = useState();
   const [messageInput, setMessageInput] = useState('');
@@ -67,12 +67,12 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
       );
     }
   };
-  const containerStyle = {backgroundColor: 'white', padding: 20, height: '50%', marginTop: 'auto'};
+  const containerStyle = { backgroundColor: 'white', padding: 20, height: '50%', marginTop: 'auto' };
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-      <MaterialCommunityIcons name="star" size={28} color="gray"></MaterialCommunityIcons></TouchableOpacity>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <MaterialCommunityIcons name="star" size={28} color="gray"></MaterialCommunityIcons></TouchableOpacity>
         <TextInput
           placeholder={'Type a message'}
           style={styles.textIput}
@@ -86,70 +86,82 @@ const InputBox = ({idUser, idRoom, message, newListMessage, user}) => {
         <View style={styles.buttonContainer}>
           {!message ? (
             <MaterialCommunityIcons name="microphone" size={24} color="grey" />
-            ) : (
-              <MaterialIcons name="send" size={24} color="gray" />
-              )}
+          ) : (
+            <MaterialIcons name="send" size={24} color="gray" />
+          )}
         </View>
-    </TouchableOpacity>
-    <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        style={styles.containerStyle}
+      </TouchableOpacity>
+      <View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          style={styles.containerStyle}
         >
-                <View style={styles.tabs}>
-                  <View style={{height: '20%',
-                      marginTop: 'auto', backgroundColor: "white", borderRadius: 5}}>
-                   <TouchableOpacity onPress={() => onTabClick(1)}
-                    state={tabSelected === 1}
-                    style={styles.tabTextStyle}
-                   >
-                  <MaterialCommunityIcons name="gif" size={35} color="#00ad9b" borderColor="gray" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
-                  </View>
-                  <View style={{height: '20%',
-                      marginTop: 'auto' , backgroundColor: "white", borderRadius: 5}}>
-                  <TouchableOpacity onPress={() => onTabClick(2)}
-                    state={tabSelected === 2}
-                    style={styles.tabTextStyle}
-                   >
-                  <MaterialCommunityIcons name="sticker" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
-                  </View>
-                  <View style={{height: '20%',
-                      marginTop: 'auto', backgroundColor: "white", borderRadius: 5}}>
-                  <TouchableOpacity onPress={() => onTabClick(3)}
-                    state={tabSelected === 3}
-                    style={styles.tabTextStyle}
-                   >
-                  <MaterialCommunityIcons name="image" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
-                  </View>
-                  </View>
-                  {tabSelected === 1 && (
-                     <View style={{height: '49%',
-                       marginTop: 'auto'}}>
-          <Gif sendAMessage={newListMessage}/>
-        </View>
-                )}
-                {tabSelected === 2 && (
-                     <View style={{height: '49%',
-                      marginTop: 'auto'}}>
-                      <Sticker sendAMessage = {newListMessage}/>
-                  </View>               
-                )}
-                {tabSelected === 3 && (
-                     <View style={{height: '48%',
-                      marginTop: 'auto'}}>
-                      <ImageAndVideo sendAMessage = {newListMessage}/>
-                  </View>               
-                )}
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style = {{alignSelf: 'center', fontWeight: 'bold', color: 'white'}}>Back</Text>
-                </Pressable>
-          </Modal>
+          <View style={styles.tabs}>
+            <View style={{
+              height: '20%',
+              marginTop: 'auto', backgroundColor: "white", borderRadius: 5
+            }}>
+              <TouchableOpacity onPress={() => onTabClick(1)}
+                state={tabSelected === 1}
+                style={styles.tabTextStyle}
+              >
+                <MaterialCommunityIcons name="gif" size={35} color="#00ad9b" borderColor="gray" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
+            </View>
+            <View style={{
+              height: '20%',
+              marginTop: 'auto', backgroundColor: "white", borderRadius: 5
+            }}>
+              <TouchableOpacity onPress={() => onTabClick(2)}
+                state={tabSelected === 2}
+                style={styles.tabTextStyle}
+              >
+                <MaterialCommunityIcons name="sticker" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
+            </View>
+            <View style={{
+              height: '20%',
+              marginTop: 'auto', backgroundColor: "white", borderRadius: 5
+            }}>
+              <TouchableOpacity onPress={() => onTabClick(3)}
+                state={tabSelected === 3}
+                style={styles.tabTextStyle}
+              >
+                <MaterialCommunityIcons name="image" size={35} color="#00ad9b" backgroundColor="white"></MaterialCommunityIcons></TouchableOpacity>
+            </View>
           </View>
+          {tabSelected === 1 && (
+            <View style={{
+              height: '49%',
+              marginTop: 'auto'
+            }}>
+              <Gif sendAMessage={newListMessage} />
+            </View>
+          )}
+          {tabSelected === 2 && (
+            <View style={{
+              height: '49%',
+              marginTop: 'auto'
+            }}>
+              <Sticker sendAMessage={newListMessage} />
+            </View>
+          )}
+          {tabSelected === 3 && (
+            <View style={{
+              height: '48%',
+              marginTop: 'auto'
+            }}>
+              <ImageAndVideo sendAMessage={newListMessage} />
+            </View>
+          )}
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => setModalVisible(!modalVisible)}
+          >
+            <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: 'white' }}>Back</Text>
+          </Pressable>
+        </Modal>
+      </View>
     </View>
   );
 };

@@ -1,18 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, FlatList, View, Text} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, FlatList, View, Text } from 'react-native';
 import ChatListItem from '../../components/ChatListItem';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function ChatsScreen() {
   const rooms = useSelector(state => state.rooms.rooms);
   const user = useSelector(state => state.user.current);
-  console.log("roommm neee",rooms)
   return (
     <View style={styles.container}>
       <FlatList
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         data={rooms}
-        renderItem={({item}) => <ChatListItem room={item} idUser={user._id} />}
+        renderItem={({ item }) => <ChatListItem room={item} idUser={user._id} />}
         keyExtractor={item => item._id}
       />
     </View>

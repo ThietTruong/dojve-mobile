@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  Button,
   PermissionsAndroid,
   Platform,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from 'react-native';
 
 import {
@@ -20,35 +18,56 @@ import {
 import { useSelector } from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionions from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import LinearGradient from 'react-native-linear-gradient';
-// import styleSheet from './styles';
+import Swiper from 'react-native-swiper';
 import axios from '../../utility/axios';
-import { Dimensions } from 'react-native';
-const windowWidth = Dimensions.get('window').width / 2 - 5;
-const windowHeight = Dimensions.get('window').height / 2 - 5;
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const VideoCallScreen = props => {
 
+
   const { navigation, route } = props;
-  const { token, user, roomId } = route.params;
+  const { token, user, roomId, video } = route.params;
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [status, setStatus] = useState('disconnected');
+  const [sid, setSid] = useState();
   // const [status, setStatus] = useState('connected');
   const [participants, setParticipants] = useState(new Map());
   const [videoTracks, setVideoTracks] = useState(new Map());
   const twilioVideo = useRef(null);
 
   const _onConnectButtonPress = async () => {
-    if (Platform.OS === 'android') {
-      await _requestAudioPermission();
-      await _requestCameraPermission();
+    setIsVideoEnabled(video)
+    if (video) {
+      if (Platform.OS === 'android') {
+        await _requestAudioPermission();
+        await _requestCameraPermission();
+      }
+      twilioVideo.current.connect({
+        accessToken: token,
+        enableNetworkQualityReporting: true,
+        roomName: roomId,
+        enableVideo: video
+      });
+      setStatus('connecting');
+    } else {
+      if (Platform.OS === 'android') {
+        await _requestAudioPermission();
+
+      }
+      twilioVideo.current.connect({
+        accessToken: token,
+        enableNetworkQualityReporting: true,
+        roomName: roomId,
+        enableVideo: false,
+      });
+      setStatus('connecting');
     }
-    twilioVideo.current.connect({
-      accessToken: token,
-      enableNetworkQualityReporting: true,
-      roomName: roomId
-    });
-    setStatus('connecting');
+
+
   };
 
   const _onEndButtonPress = () => {
@@ -65,11 +84,13 @@ const VideoCallScreen = props => {
     twilioVideo.current.flipCamera();
   };
 
-  const _onRoomDidConnect = () => {
+  const _onRoomDidConnect = ({ roomSid }) => {
+    setSid(roomSid);
     setStatus('connected');
   };
 
   const _onRoomDidDisconnect = ({ error }) => {
+
     console.log('ERROR: ', error);
 
     setStatus('disconnected');
@@ -83,7 +104,7 @@ const VideoCallScreen = props => {
 
   const _onParticipantAddedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantAddedVideoTrack: ', participant, track);
-
+    setParticipants([...participants, participant]);
     setVideoTracks(
       new Map([
         ...videoTracks,
@@ -97,10 +118,10 @@ const VideoCallScreen = props => {
 
   const _onParticipantRemovedVideoTrack = ({ participant, track }) => {
     console.log('onParticipantRemovedVideoTrack: ', participant, track);
-
+    let newParticipant = participants.filter(item => item.sid !== participant.sid);
+    setParticipants(newParticipant);
     const videoTracks = new Map(videoTracks);
     videoTracks.delete(track.trackSid);
-
     setVideoTracks(videoTracks);
   };
 
@@ -129,36 +150,40 @@ const VideoCallScreen = props => {
       buttonPositive: 'OK',
     });
   };
+
   useEffect(() => {
     _onConnectButtonPress();
   }, []);
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', e => {
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-        const action = e.data.action;
+  // useEffect(
+  //   () =>
+  //     navigation.addListener('beforeRemove', e => {
+  //       // Prevent default behavior of leaving the screen
+  //       e.preventDefault();
+  //       const action = e.data.action;
 
-        // Prompt the user before leaving the screen
-        Alert.alert('Conversation', 'Do you want to leave the conversation?', [
-          { text: 'Stay', style: 'cancel', onPress: () => { } },
-          {
-            text: 'Leave',
-            style: 'destructive',
-            onPress: () => { _onEndButtonPress(), navigation.dispatch(e.data.action) },
+  //       // Prompt the user before leaving the screen
+  //       Alert.alert('Conversation', 'Do you want to leave the conversation?', [
+  //         { text: 'Stay', style: 'cancel', onPress: () => { } },
+  //         {
+  //           text: 'Leave',
+  //           style: 'destructive',
+  //           onPress: () => handleLeave()
 
-          },
-        ]);
-      }),
-    [navigation],
-  );
+  //         },
+  //       ]);
+  //     }),
+  //   [navigation],
+  // );
 
   const handleLeave = async () => {
-    _onEndButtonPress();
-    await navigation.goBack();
-    await _onConnectButtonPress();
+    await _onEndButtonPress();
+    // await _onConnectButtonPress();
+    await navigation.popToTop();
 
   };
+  const handleIsVideoEnabled = () => {
+    setIsVideoEnabled(!isVideoEnabled)
+  }
   return (
     <View style={styles.container}>
       {/* {status === 'disconnected' && (
@@ -180,21 +205,49 @@ const VideoCallScreen = props => {
         <View style={styles.callContainer}>
           {status === 'connected' && (
             <View style={styles.remoteGrid}>
-              {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
-                return (
-                  <View key={trackSid}>
-                    <TwilioVideoParticipantView
-                      style={styles.remoteVideo}
-                      trackIdentifier={{ ...trackIdentifier, enabled: true }}
-                      enabled={true}
-                      scaleType="fill"
-                    />
-                  </View>
-                );
-              })}
+              <Swiper style={styles.listTrackVideo} >
+                {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
+                  let nameTrackIdentifier = participants.find(item => item.sid === trackIdentifier.participantSid);
+                  return (
+                    <View key={trackSid}>
+                      <TwilioVideoParticipantView
+                        style={styles.remoteVideo}
+                        trackIdentifier={{ ...trackIdentifier, enabled: true }}
+                        enabled={true}
+                        scaleType="fill"
+                      />
+                      <View style={styles.nameIndentity}>
+                        <Text style={styles.textIndetity}>{nameTrackIdentifier.identity}</Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </Swiper>
             </View>
           )}
           <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              onPress={() => setIsVideoEnabled(!isVideoEnabled)}
+              style={[
+                styles.optionButton,
+                {
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                },
+              ]}
+            >
+              <Text style={{ fontSize: 12 }}>
+                {isVideoEnabled ? (
+                  <Feather name="video" size={22} color="#fff" />
+                ) : (
+                  <Feather
+                    name="video-off"
+                    size={22}
+                    color="#fff"
+                  />
+                )}
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={[
                 styles.optionButton,
@@ -218,7 +271,7 @@ const VideoCallScreen = props => {
             <LinearGradient
               colors={['#DA3344', '#CF1843']}
               style={styles.optionButton}>
-              <TouchableOpacity onPress={() => handleLeave()}>
+              <TouchableOpacity onPress={handleLeave}>
                 <Text style={{ fontSize: 12 }}>
                   <FontAwesome5 name="phone-slash" size={22} color="#fff" />
                 </Text>
@@ -240,10 +293,27 @@ const VideoCallScreen = props => {
                 />
               </Text>
             </TouchableOpacity>
-            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+            <TouchableOpacity
+              onPress={() => navigation.navigate("InviteGroup", { sid: sid })}
+              style={[
+                styles.optionButton,
+                {
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                },
+              ]}>
+              <Text style={{ fontSize: 12 }}>
+                <AntDesign
+                  name="addusergroup"
+                  size={28}
+                  color="#fff"
+                />
+              </Text>
+            </TouchableOpacity>
+            {isVideoEnabled ? <TwilioVideoLocalView enabled={true} style={styles.localVideo} /> : <View></View>}
           </View>
         </View>
       )}
+
 
       <TwilioVideo
         ref={twilioVideo}
@@ -292,20 +362,16 @@ const styles = StyleSheet.create({
     width: 150,
     height: 250,
     position: 'absolute',
-    right: 5,
-    bottom: 495,
+    right: 0,
+    bottom: windowHeight - 285,
+    display: 'none'
   },
   remoteGrid: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // backgroundColor:"red"
   },
   remoteVideo: {
-    marginTop: 1,
-    marginLeft: 1,
-    marginRight: 1,
-    borderRadius: 20,
     width: windowWidth,
     height: windowHeight,
   },
@@ -330,8 +396,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  listTrackVideo: {
+  },
+  videoStrackSid: {
+    width: windowWidth,
+    height: windowHeight,
+    position: 'relative',
+  },
+  nameIndentity: {
+    position: 'absolute',
+    top: windowHeight - (windowHeight / 100) * 30,
+    left: windowWidth / 2 - 20,
+    fontSize: 50,
+    color: '#fff',
+    zIndex: 1000,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  textIndetity: {
+    textTransform: 'capitalize'
+  },
+  invites: {
+    width: 200,
+    height: 200,
+  }
 })
 // AppRegistry.registerComponent('Example', () => Example);
 export default VideoCallScreen;
-
-

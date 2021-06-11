@@ -1,14 +1,15 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors.js';
 const styles = StyleSheet.create({
   container: {
     padding: 10,
   },
   messageBox: {
+    alignSelf: "flex-end",
     backgroundColor: '#01ad9b',
-    marginRight: 50,
     borderRadius: 5,
     padding: 10,
+    maxWidth: "80%"
   },
   name: {
     color: Colors.light.tint,
@@ -39,11 +40,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 5,
   },
-  imgContainer:{
+  imgContainer: {
     width: 200,
     height: 220,
   },
-  stickerContainer:{
+  stickerContainer: {
     width: 140,
     height: 150,
   },
@@ -52,11 +53,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
-  gifContainer:{
+  gifContainer: {
     width: 160,
     height: 170,
   },
-  videoContainer:{
+  videoContainer: {
     width: 200,
     height: 300,
   },

@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,21 +6,21 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {setUser} from '../feature/user';
-import {rooms, setRooms} from '../feature/rooms';
-import {connectSocket} from '../feature/socketClient';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../feature/user';
+import { rooms, setRooms } from '../feature/rooms';
+import { connectSocket } from '../feature/socketClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../utility/axios';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-const SplashScreen = ({navigation}) => {
+const SplashScreen = ({ navigation }) => {
   const [isLogin, setIsLogin] = useState(false)
   const dispatch = useDispatch();
   useEffect(() => {
     axios.get('/auth/signinW').then(async res => {
-      const {data} = res;
+      const { data } = res;
       if (!data.error) {
         let user = data.user;
         user.token = data.token;
@@ -41,11 +41,11 @@ const SplashScreen = ({navigation}) => {
       }
     });
   }, []);
-  const handleGetStarted = () =>{
-    if(isLogin){
+  const handleGetStarted = () => {
+    if (isLogin) {
       navigation.navigate('Chat');
     }
-    else{
+    else {
       navigation.navigate('SignInScreen')
     }
   }
@@ -80,7 +80,7 @@ const SplashScreen = ({navigation}) => {
 };
 
 export default SplashScreen;
-const {height} = Dimensions.get('screen');
+const { height } = Dimensions.get('screen');
 const height_logo = height * 0.28;
 const styles = StyleSheet.create({
   container: {
