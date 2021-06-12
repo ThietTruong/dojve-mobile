@@ -1,1 +1,1 @@
-export const ipv4 = '192.168.0.101';
+export const ipv4 = 'https://dojve-server.herokuapp.com/';

@@ -47,7 +47,6 @@ export default function Chat({ navigation, route }) {
         //   caller: data.caller,
         //   video: data.video,
         // });
-        console.log("day la data", data)
         const caller = data.caller;
         axios
           .get(`/call/joinRoom?sid=${data.sid}`)
@@ -118,6 +117,7 @@ export default function Chat({ navigation, route }) {
             (error, msg) => {
               if (error) console.log(error);
               console.log(msg);
+              setIsVideoCalling(false)
             },
           );
           navigation.navigate('VideoCallScreen', {
@@ -150,6 +150,7 @@ export default function Chat({ navigation, route }) {
             (error, msg) => {
               if (error) console.log(error);
               console.log(msg);
+              setIsCalling(false);
             },
           );
           navigation.navigate('VideoCallScreen', {

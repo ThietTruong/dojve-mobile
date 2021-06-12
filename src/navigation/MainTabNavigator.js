@@ -1,21 +1,15 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { View, Text } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ChatsScreen from '../screens/ChatScreents/ChatsScreen';
+import Status from '../screens/Status';
 const MainTab = createMaterialTopTabNavigator();
 
-function SettingsScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
 const MainTabNavigator = () => {
   return (
     <MainTab.Navigator>
-      <MainTab.Screen name="ChatScreen" component={ChatsScreen} />
-      <MainTab.Screen name="Status" component={SettingsScreen} />
+      <MainTab.Screen name="Chat" component={ChatsScreen} />
+      <MainTab.Screen name="Status" component={Status} />
     </MainTab.Navigator>
   );
 };
