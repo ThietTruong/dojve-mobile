@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import {setUser} from '../feature/user';
-import {rooms, setRooms} from '../feature/rooms';
-import {connectSocket} from '../feature/socketClient';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../feature/user';
+import { rooms, setRooms } from '../feature/rooms';
+import { connectSocket } from '../feature/socketClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../utility/axios';
+
 import {
   View,
   Text,
@@ -19,7 +20,7 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({
     email: '',
@@ -93,7 +94,8 @@ const SignInScreen = ({navigation}) => {
     axios
       .post('auth/signin', account)
       .then(async res => {
-        const {data} = res;
+        const { data } = res;
+        console.log("this login", data)
         if (!data.error) {
           let user = data.user;
           dispatch(setUser(user));

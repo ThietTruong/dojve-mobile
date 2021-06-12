@@ -1,7 +1,7 @@
 import axios from 'axios';
-import {ipv4} from './IPv4';
+import { ipv4 } from './IPv4';
 const intance = axios.create({
-  baseURL: `http://${ipv4}:5000`,
+  baseURL: `https://dojve-server.herokuapp.com/`,
   withCredentials: true,
 });
 
